@@ -70,10 +70,10 @@
  - DOMAIN,whoami.nie.netease.com
  - DOMAIN,whoami.nie.tx163.com
  - DOMAIN,zz.bdstatic.com
- - IP-CIDR,61.157.0.0/16,no-resolve
- - IP-CIDR,42.186.0.0/17,no-resolve
- - IP-CIDR,45.253.152.0/21,no-resolve
- - IP-CIDR,59.111.40.0/21,no-resolve
- - IP-CIDR,103.71.201.0/24,no-resolve
- - IP-CIDR,223.252.212.0/24,no-resolve
- - IP-CIDR,2407:ad80:1013:e001::/32,no-resolve
+ - IP-CIDR,61.157.0.0/16
+ - IP-CIDR,42.186.0.0/17
+ - IP-CIDR,45.253.152.0/21
+ - IP-CIDR,59.111.40.0/21
+ - IP-CIDR,103.71.201.0/24
+ - IP-CIDR,223.252.212.0/24
+ - IP-CIDR,2407:ad80:1013:e001::/32
