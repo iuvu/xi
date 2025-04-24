@@ -115,6 +115,13 @@ rule-providers:
     url: "https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/direct.txt"
     interval: 86400
     path: ./ruleset/direct.yaml
+    
+  ChinaIPs_IP:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/ChinaIPs/ChinaIPs_IP.yaml"
+    interval: 86400
+    path: ./ruleset/ChinaIPs_IP.yaml
 
   lancidr:
     type: http
@@ -135,5 +142,6 @@ rules:
   - RULE-SET,Telegram,Telegram
   - RULE-SET,Proxy,Yily
   - RULE-SET,direct,DIRECT
+  - RULE-SET,ChinaIPs_IP,DIRECT,no-resolve
   - RULE-SET,lancidr,DIRECT,no-resolve
   - MATCH,Yily
