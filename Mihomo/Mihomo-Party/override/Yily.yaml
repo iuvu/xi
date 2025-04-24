@@ -137,7 +137,7 @@ rules:
   - RULE-SET,Copilot,Yily
   - RULE-SET,SteamCN,DIRECT
   - RULE-SET,Steam,Steam
-  - RULE-SET,Emby,Emby
+  - RULE-SET,Emby,Emby,no-resolve
   - RULE-SET,Discord,Discord
   - RULE-SET,Telegram,Telegram
   - RULE-SET,Proxy,Yily
