@@ -39,6 +39,13 @@ proxy-groups:
       - Yily
 
 rule-providers:
+  reject:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
+    interval: 86400
+    path: ./ruleset/reject.yaml
+
   Bilibili:
     type: http
     behavior: classical
@@ -102,21 +109,22 @@ rule-providers:
     interval: 86400
     path: ./ruleset/Proxy_Classical_No_Resolve.yaml
 
-  ChinaMax:
+  direct:
     type: http
-    behavior: classical
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax_Classical_No_Resolve.yaml"
+    behavior: domain
+    url: "https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/direct.txt"
     interval: 86400
-    path: ./ruleset/ChinaMax_Classical_No_Resolve.yaml
+    path: ./ruleset/direct.yaml
 
-  Lan:
+  lancidr:
     type: http
     behavior: classical
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan_No_Resolve.yaml"
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt"
     interval: 86400
-    path: ./ruleset/Lan_No_Resolve.yaml
+    path: ./ruleset/lancidr.yaml
 
 rules:
+  - RULE-SET,reject,REJECT
   - RULE-SET,Bilibili,Bilibili
   - RULE-SET,Microsoft,DIRECT
   - RULE-SET,Copilot,Yily
@@ -126,6 +134,6 @@ rules:
   - RULE-SET,Discord,Discord
   - RULE-SET,Telegram,Telegram
   - RULE-SET,Proxy,Yily
-  - RULE-SET,ChinaMax,DIRECT
-  - RULE-SET,Lan,DIRECT
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,lancidr,DIRECT,no-resolve
   - MATCH,Yily
