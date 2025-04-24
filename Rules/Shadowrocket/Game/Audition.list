@@ -1,0 +1,8 @@
+# 劲舞团 (Audition) - 久游 (9you)
+# 规则中有一定的误伤
+#
+# ------
+DOMAIN,au.patch1.9you.com
+DOMAIN,api.jwfy.9you.com
+IP-CIDR,47.117.128.0/17
+IP-CIDR,180.188.16.0/21
