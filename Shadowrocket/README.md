@@ -1,1 +1,1 @@
-参考：https://github.com/wlxuf/Shadowrocket/blob/main/lazy_group.conf
+参考：https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever/blob/release/lazy_group.conf
