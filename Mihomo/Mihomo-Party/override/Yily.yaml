@@ -84,7 +84,7 @@ rule-providers:
   Emby:
     type: http
     behavior: classical
-    url: "https://raw.githubusercontent.com/YilyOu/YiIy/x/Rules/Clash/Emby.yaml"
+    url: "https://github.com/YilyOu/Yily/raw/release/Rules/Clash/Emby.yaml"
     interval: 86400
     path: ./ruleset/Emby.yaml
 
