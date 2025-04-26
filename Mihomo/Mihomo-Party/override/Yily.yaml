@@ -118,14 +118,14 @@ rule-providers:
     
   cncidr:
     type: http
-    behavior: domain
+    behavior: ipcidr
     url: "https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/cncidr.txt"
     interval: 86400
     path: ./ruleset/cncidr.yaml
 
   lancidr:
     type: http
-    behavior: classical
+    behavior: ipcidr
     url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt"
     interval: 86400
     path: ./ruleset/lancidr.yaml
