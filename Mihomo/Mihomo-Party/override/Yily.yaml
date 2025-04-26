@@ -42,9 +42,9 @@ rule-providers:
   reject:
     type: http
     behavior: domain
-    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
+    url: "https://github.com/217heidai/adblockfilters/raw/refs/heads/main/rules/adblockmihomolite.yaml"
     interval: 86400
-    path: ./ruleset/reject.yaml
+    path: ./ruleset/adblockmihomolite.yaml
 
   Bilibili:
     type: http
