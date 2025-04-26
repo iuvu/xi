@@ -102,26 +102,26 @@ rule-providers:
     interval: 86400
     path: ./ruleset/Telegram_No_Resolve.yaml
 
-  Proxy:
+  proxy:
     type: http
-    behavior: classical
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Proxy/Proxy_Classical_No_Resolve.yaml"
+    behavior: domain
+    url: "https://github.com/Loyalsoldier/clash-rules/raw/release/proxy.txt"
     interval: 86400
-    path: ./ruleset/Proxy_Classical_No_Resolve.yaml
+    path: ./ruleset/proxy.yaml
 
   direct:
     type: http
     behavior: domain
-    url: "https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/direct.txt"
+    url: "https://github.com/Loyalsoldier/clash-rules/raw/release/direct.txt"
     interval: 86400
     path: ./ruleset/direct.yaml
     
-  ChinaIPs_IP:
+  cncidr:
     type: http
     behavior: domain
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/ChinaIPs/ChinaIPs_IP.yaml"
+    url: "https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/cncidr.txt"
     interval: 86400
-    path: ./ruleset/ChinaIPs_IP.yaml
+    path: ./ruleset/cncidr.yaml
 
   lancidr:
     type: http
@@ -140,8 +140,8 @@ rules:
   - RULE-SET,Emby,Emby,no-resolve
   - RULE-SET,Discord,Discord
   - RULE-SET,Telegram,Telegram
-  - RULE-SET,Proxy,Yily
+  - RULE-SET,proxy,Yily
   - RULE-SET,direct,DIRECT
-  - RULE-SET,ChinaIPs_IP,DIRECT,no-resolve
+  - RULE-SET,cncidr,DIRECT,no-resolve
   - RULE-SET,lancidr,DIRECT,no-resolve
   - MATCH,Yily
