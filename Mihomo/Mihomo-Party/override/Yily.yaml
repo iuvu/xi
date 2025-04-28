@@ -42,9 +42,9 @@ rule-providers:
   reject:
     type: http
     behavior: domain
-    url: "https://github.com/217heidai/adblockfilters/raw/refs/heads/main/rules/adblockmihomolite.yaml"
+    url: "https://github.com/privacy-protection-tools/anti-AD/raw/refs/heads/master/anti-ad-clash.yaml"
     interval: 86400
-    path: ./ruleset/adblockmihomolite.yaml
+    path: ./ruleset/anti-ad-clash.yaml
 
   Bilibili:
     type: http
