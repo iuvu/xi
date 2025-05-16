@@ -2,6 +2,7 @@
 # 规则中有一定的误伤
 #
 # ------
+payload:
 DOMAIN,cjm.broker.tplay.qq.com
 DOMAIN,cn.voice.gcloudcs.com
 DOMAIN,cschannel.anticheatexpert.com
