@@ -1,0 +1,19 @@
+# 和平精英 (Game For Peace)
+# 规则中有一定的误伤
+#
+# ------
+DOMAIN,cjm.broker.tplay.qq.com
+DOMAIN,cn.voice.gcloudcs.com
+DOMAIN,cschannel.anticheatexpert.com
+DOMAIN,down.qq.com
+DOMAIN,jsonatm.broker.tplay.qq.com
+DOMAIN,ops.gp.qq.com
+DOMAIN,pc.perfsight.qq.com
+DOMAIN,thirdwx.qlogo.cn
+DOMAIN,tqos.gamesafe.qq.com
+DOMAIN,wx56.cg.qq.com
+IP-CIDR,101.88.0.0/13
+IP-CIDR,109.244.0.0/16
+IP-CIDR,175.27.0.0/21
+IP-CIDR,43.137.160.0/19
+IP-CIDR,43.141.0.0/19
