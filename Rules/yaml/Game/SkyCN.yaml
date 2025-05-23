@@ -73,30 +73,32 @@ payload:
  - DOMAIN,zz.bdstatic.com
 
 # > Mumu
- - DOMAIN,mumu.nie.netease.com
- - DOMAIN,unisec-inner.nie.netease.com
+DOMAIN,mumu.nie.netease.com
+DOMAIN,unisec-inner.nie.netease.com
 
 # > 华为渠道服
- - DOMAIN,gate.push.x.netease.com
- - DOMAIN,hwid-drcn.platform.hicloud.com
- - DOMAIN,oauth-login-drcn.platform.dbankcloud.com
- - DOMAIN,realname-drcn.platform.dbankcloud.com
- - DOMAIN,sigma-statistics-push.proxima.nie.netease.com
- - DOMAIN,store-dre.hispace.dbankcloud.cn
- - DOMAIN,unipush.x.netease.com
+DOMAIN,gate.push.x.netease.com
+DOMAIN,hwid-drcn.platform.hicloud.com
+DOMAIN,oauth-login-drcn.platform.dbankcloud.com
+DOMAIN,openlocation-drcn.platform.dbankcloud.com
+DOMAIN,realname-drcn.platform.dbankcloud.com
+DOMAIN,sigma-statistics-push.proxima.nie.netease.com
+DOMAIN,store-dre.hispace.dbankcloud.cn
+DOMAIN,tsms-drcn.security.dbankcloud.cn
+DOMAIN,unipush.x.netease.com
 
- - IP-CIDR,61.157.0.0/16
- - IP-CIDR,124.70.0.0/17
- - IP-CIDR,42.186.128.0/17
- - IP-CIDR,42.186.0.0/17
- - IP-CIDR,45.253.176.0/20
- - IP-CIDR,45.253.152.0/21
- - IP-CIDR,59.111.40.0/21
- - IP-CIDR,103.71.201.0/24
+IP-CIDR,61.157.0.0/16
+IP-CIDR,124.70.0.0/17
+IP-CIDR,42.186.128.0/17
+IP-CIDR,42.186.0.0/17
+IP-CIDR,45.253.176.0/20
+IP-CIDR,45.253.152.0/21
+IP-CIDR,59.111.40.0/21
+IP-CIDR,103.71.201.0/24
 
 # > 华为渠道服
- - IP-CIDR,49.4.32.0/20
- - IP-CIDR,45.253.152.0/21
- - IP-CIDR,223.252.212.0/24
-
+IP-CIDR,121.36.0.0/17
+IP-CIDR,49.4.32.0/20
+IP-CIDR,45.253.152.0/21
+IP-CIDR,223.252.212.0/24
  - IP-CIDR,2407:ad80:1013:e001::/32
