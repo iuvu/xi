@@ -79,9 +79,11 @@ DOMAIN,unisec-inner.nie.netease.com
 DOMAIN,gate.push.x.netease.com
 DOMAIN,hwid-drcn.platform.hicloud.com
 DOMAIN,oauth-login-drcn.platform.dbankcloud.com
+DOMAIN,openlocation-drcn.platform.dbankcloud.com
 DOMAIN,realname-drcn.platform.dbankcloud.com
 DOMAIN,sigma-statistics-push.proxima.nie.netease.com
 DOMAIN,store-dre.hispace.dbankcloud.cn
+DOMAIN,tsms-drcn.security.dbankcloud.cn
 DOMAIN,unipush.x.netease.com
 
 IP-CIDR,61.157.0.0/16
