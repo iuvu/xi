@@ -3,15 +3,16 @@
 #
 # ------
 payload:
- - DOMAIN,au.patch1.9you.com
- - DOMAIN,static.fraudmetrix.cn
- - DOMAIN,dest.passport.9you.com
  - DOMAIN,acoc.9you.com
- - DOMAIN,shop.9you.com
- - DOMAIN,login.passport.9you.com
+ - DOMAIN,api.jwfy.9you.com
+ - DOMAIN,au.patch1.9you.com
+ - DOMAIN,dest.passport.9you.com
+ - DOMAIN,fp.fraudmetrix.cn
  - DOMAIN,fp.tongdun.net
  - DOMAIN,jwfy.9you.com
- - DOMAIN,api.jwfy.9you.com
+ - DOMAIN,login.passport.9you.com
+ - DOMAIN,shop.9you.com
+ - DOMAIN,static.fraudmetrix.cn
 
  # > 华南一区
  - IP-CIDR,180.153.0.0/16
