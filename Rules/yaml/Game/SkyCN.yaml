@@ -3,75 +3,75 @@
 #
 # ------
 payload:
- - DOMAIN,acsdk.gameyw.netease.com
- - DOMAIN,ali-video-dashen.cc.netease.com
- - DOMAIN,analytics.mpay.netease.com
- - DOMAIN,api.ds.163.com
- - DOMAIN,api.gmsdk.gameyw.netease.com
- - DOMAIN,appdump.nie.netease.com
- - DOMAIN,applog.matrix.netease.com
- - DOMAIN,bee.tc.netease.com
- - DOMAIN,bind-mobile.g.mkey.163.com
- - DOMAIN,data-detect.nie.netease.com
- - DOMAIN,dns.update.netease.com
- - DOMAIN,drpf-ma75.proxima.nie.netease.com
- - DOMAIN,drpf-unisdk.proxima.nie.netease.com
- - DOMAIN,ds.res.netease.com
- - DOMAIN,fp-upload.dun.163.com
- - DOMAIN,g.166.net
- - DOMAIN,g0.gsf.netease.com
- - DOMAIN,gmsdk.gameyw.netease.com
- - DOMAIN,god.gameyw.netease.com
- - DOMAIN,h5.ds.163.com
- - DOMAIN,img.166.net
- - DOMAIN,impression.update.netease.com
- - DOMAIN,kefu.16163.com
- - DOMAIN,live-as-sky-merge.game.163.com
- - DOMAIN,live-auth-sky-merge.game.163.com
- - DOMAIN,live-gms-sky-merge.game.163.com
- - DOMAIN,live-queue-sky-merge.game.163.com
- - DOMAIN,live-ws-sky-merge.game.163.com
- - DOMAIN,ma75.appdump.nie.netease.com
- - DOMAIN,ma75.fp.ps.netease.com
- - DOMAIN,ma75.gsf.netease.com
- - DOMAIN,ma75.list.inner.netease.com
- - DOMAIN,ma75.update.netease.com
- - DOMAIN,mailbox.g.mkey.163.com
- - DOMAIN,mgbsdk.matrix.netease.com
- - DOMAIN,mpay-translation.g.mkey.163.com
- - DOMAIN,netlink-sigma.proxima.nie.netease.com
- - DOMAIN,nie.res.netease.com
- - DOMAIN,nos.gameyw.easebar.com
- - DOMAIN,nos.gameyw.netease.com
- - DOMAIN,nstool.321fenx.com
- - DOMAIN,nstool.laiqukankan.com
- - DOMAIN,ok.166.net
- - DOMAIN,optsdk.gameyw.netease.com
- - DOMAIN,polyfill.166.net
- - DOMAIN,protocol.unisdk.netease.com
- - DOMAIN,s.q.netease.com
- - DOMAIN,s3.game.163.com
- - DOMAIN,sentry-dsn.166.net
- - DOMAIN,service.mkey.163.com
- - DOMAIN,sigma-buriedpoint-a19.proxima.nie.netease.com
- - DOMAIN,sigma-buriedpoint-opd.proxima.nie.netease.com
- - DOMAIN,sigma-clientoptimize-ma75.proxima.nie.netease.com
- - DOMAIN,sigma-csp-opd.proxima.nie.netease.com
- - DOMAIN,sigma-lgd-ma75.proxima.nie.netease.com
- - DOMAIN,sky.h5.163.com
- - DOMAIN,sky.res.netease.com
- - DOMAIN,sky.v.netease.com
- - DOMAIN,sprite.16163.com
- - DOMAIN,sprite.gameyw.netease.com
- - DOMAIN,sprite-official.fp.ps.netease.com
- - DOMAIN,tdid.netease.com
- - DOMAIN,timejs.game.163.com
- - DOMAIN,unipush.x.netease.com
- - DOMAIN,unisdk.update.netease.com
- - DOMAIN,vod.cc.163.com
- - DOMAIN,whoami.nie.netease.com
- - DOMAIN,whoami.nie.tx163.com
- - DOMAIN,zz.bdstatic.com
+ -  - DOMAIN,acsdk.gameyw.netease.com
+ -  - DOMAIN,ali-video-dashen.cc.netease.com
+ -  - DOMAIN,analytics.mpay.netease.com
+ -  - DOMAIN,api.ds.163.com
+ -  - DOMAIN,api.gmsdk.gameyw.netease.com
+ -  - DOMAIN,appdump.nie.netease.com
+ -  - DOMAIN,applog.matrix.netease.com
+ -  - DOMAIN,bee.tc.netease.com
+ -  - DOMAIN,bind-mobile.g.mkey.163.com
+ -  - DOMAIN,data-detect.nie.netease.com
+ -  - DOMAIN,dns.update.netease.com
+ -  - DOMAIN,drpf-ma75.proxima.nie.netease.com
+ -  - DOMAIN,drpf-unisdk.proxima.nie.netease.com
+ -  - DOMAIN,ds.res.netease.com
+ -  - DOMAIN,fp-upload.dun.163.com
+ -  - DOMAIN,g.166.net
+ -  - DOMAIN,g0.gsf.netease.com
+ -  - DOMAIN,gmsdk.gameyw.netease.com
+ -  - DOMAIN,god.gameyw.netease.com
+ -  - DOMAIN,h5.ds.163.com
+ -  - DOMAIN,img.166.net
+ -  - DOMAIN,impression.update.netease.com
+ -  - DOMAIN,kefu.16163.com
+ -  - DOMAIN,live-as-sky-merge.game.163.com
+ -  - DOMAIN,live-auth-sky-merge.game.163.com
+ -  - DOMAIN,live-gms-sky-merge.game.163.com
+ -  - DOMAIN,live-queue-sky-merge.game.163.com
+ -  - DOMAIN,live-ws-sky-merge.game.163.com
+ -  - DOMAIN,ma75.appdump.nie.netease.com
+ -  - DOMAIN,ma75.fp.ps.netease.com
+ -  - DOMAIN,ma75.gsf.netease.com
+ -  - DOMAIN,ma75.list.inner.netease.com
+ -  - DOMAIN,ma75.update.netease.com
+ -  - DOMAIN,mailbox.g.mkey.163.com
+ -  - DOMAIN,mgbsdk.matrix.netease.com
+ -  - DOMAIN,mpay-translation.g.mkey.163.com
+ -  - DOMAIN,netlink-sigma.proxima.nie.netease.com
+ -  - DOMAIN,nie.res.netease.com
+ -  - DOMAIN,nos.gameyw.easebar.com
+ -  - DOMAIN,nos.gameyw.netease.com
+ -  - DOMAIN,nstool.321fenx.com
+ -  - DOMAIN,nstool.laiqukankan.com
+ -  - DOMAIN,ok.166.net
+ -  - DOMAIN,optsdk.gameyw.netease.com
+ -  - DOMAIN,polyfill.166.net
+ -  - DOMAIN,protocol.unisdk.netease.com
+ -  - DOMAIN,s.q.netease.com
+ -  - DOMAIN,s3.game.163.com
+ -  - DOMAIN,sentry-dsn.166.net
+ -  - DOMAIN,service.mkey.163.com
+ -  - DOMAIN,sigma-buriedpoint-a19.proxima.nie.netease.com
+ -  - DOMAIN,sigma-buriedpoint-opd.proxima.nie.netease.com
+ -  - DOMAIN,sigma-clientoptimize-ma75.proxima.nie.netease.com
+ -  - DOMAIN,sigma-csp-opd.proxima.nie.netease.com
+ -  - DOMAIN,sigma-lgd-ma75.proxima.nie.netease.com
+ -  - DOMAIN,sky.h5.163.com
+ -  - DOMAIN,sky.res.netease.com
+ -  - DOMAIN,sky.v.netease.com
+ -  - DOMAIN,sprite.16163.com
+ -  - DOMAIN,sprite.gameyw.netease.com
+ -  - DOMAIN,sprite-official.fp.ps.netease.com
+ -  - DOMAIN,tdid.netease.com
+ -  - DOMAIN,timejs.game.163.com
+ -  - DOMAIN,unipush.x.netease.com
+ -  - DOMAIN,unisdk.update.netease.com
+ -  - DOMAIN,vod.cc.163.com
+ -  - DOMAIN,whoami.nie.netease.com
+ -  - DOMAIN,whoami.nie.tx163.com
+ -  - DOMAIN,zz.bdstatic.com
 
 # > 游戏内音乐
  - DOMAIN,ac.dun.163.com
@@ -88,6 +88,8 @@ payload:
  - DOMAIN,interface.music.163.com
  - DOMAIN,music.163.com
  - DOMAIN,nos.netease.com
+ - DOMAIN,p1.music.126.net
+ - DOMAIN,p2.music.126.net
  - DOMAIN,p3.music.126.net
  - DOMAIN,p4.music.126.net
  - DOMAIN,pr.nss.netease.com
@@ -101,18 +103,18 @@ payload:
  - DOMAIN,ye.dun.163yun.com
 
 # > Mumu
- - DOMAIN,mumu.nie.netease.com
- - DOMAIN,unisec-inner.nie.netease.com
+ -  - DOMAIN,mumu.nie.netease.com
+ -  - DOMAIN,unisec-inner.nie.netease.com
 
 # > 华为渠道服
- - DOMAIN,gate.push.x.netease.com
- - DOMAIN,hwid-drcn.platform.hicloud.com
- - DOMAIN,oauth-login-drcn.platform.dbankcloud.com
- - DOMAIN,openlocation-drcn.platform.dbankcloud.com
- - DOMAIN,realname-drcn.platform.dbankcloud.com
- - DOMAIN,sigma-statistics-push.proxima.nie.netease.com
- - DOMAIN,store-dre.hispace.dbankcloud.cn
- - DOMAIN,tsms-drcn.security.dbankcloud.cn
+ -  - DOMAIN,gate.push.x.netease.com
+ -  - DOMAIN,hwid-drcn.platform.hicloud.com
+ -  - DOMAIN,oauth-login-drcn.platform.dbankcloud.com
+ -  - DOMAIN,openlocation-drcn.platform.dbankcloud.com
+ -  - DOMAIN,realname-drcn.platform.dbankcloud.com
+ -  - DOMAIN,sigma-statistics-push.proxima.nie.netease.com
+ -  - DOMAIN,store-dre.hispace.dbankcloud.cn
+ -  - DOMAIN,tsms-drcn.security.dbankcloud.cn
 
  - IP-CIDR,61.157.0.0/16
  - IP-CIDR,124.70.0.0/17
