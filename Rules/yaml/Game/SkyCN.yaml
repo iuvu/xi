@@ -80,7 +80,9 @@ payload:
  - DOMAIN,cstaticdun.126.net
  - DOMAIN,da.dun.163.com
  - DOMAIN,dl.reg.163.com
+ - DOMAIN,dl.reg.163.com
  - DOMAIN,ens=try-proxy.music.163.com
+ - DOMAIN,fl.reg.163.com
  - DOMAIN,fl.reg.163.com
  - DOMAIN,i202.music.126.net
  - DOMAIN,interface.music.163.com
@@ -99,6 +101,12 @@ payload:
  - DOMAIN,webzjac.reg.163.com
  - DOMAIN,webzjcaptcha.reg.163.com
  - DOMAIN,ye.dun.163yun.com
+
+# > 游戏内直播
+ - DOMAIN,api.cc.163.com
+ - DOMAIN,cc.163.com
+ - DOMAIN,cc.res.netease.com
+ - DOMAIN,coopapi.cc.163.com
 
 # > Mumu
  - DOMAIN,mumu.nie.netease.com
@@ -128,5 +136,5 @@ payload:
  - IP-CIDR,49.4.32.0/20
  - IP-CIDR,45.253.152.0/21
  - IP-CIDR,223.252.212.0/24
- 
+
  - IP-CIDR,2407:ad80:1013:e001::/32
