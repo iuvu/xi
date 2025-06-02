@@ -101,6 +101,12 @@ DOMAIN,webzjac.reg.163.com
 DOMAIN,webzjcaptcha.reg.163.com
 DOMAIN,ye.dun.163yun.com
 
+# > 游戏内直播
+DOMAIN,api.cc.163.com
+DOMAIN,cc.163.com
+DOMAIN,cc.res.netease.com
+DOMAIN,coopapi.cc.163.com
+
 # > Mumu
 DOMAIN,mumu.nie.netease.com
 DOMAIN,unisec-inner.nie.netease.com
