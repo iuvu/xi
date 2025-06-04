@@ -1,4 +1,4 @@
-#!url:https://raw.githubusercontent.com/xiyily/YiIy/x/Shadowrocket/Rewrite/AlterEmbyClient.sgmodule
+#!url:https://github.com/YilyOu/Yily/raw/release/Rewrite/AlterEmbyClient.sgmodule
 #!name=Alter Emby Client
 
 #!desc=解除禁止 Infuse 登录 Emby 服务器的限制，支持tvOS端。
