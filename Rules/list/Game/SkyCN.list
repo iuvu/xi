@@ -63,7 +63,6 @@ DOMAIN,sky.v.netease.com
 DOMAIN,sprite.16163.com
 DOMAIN,sprite.gameyw.netease.com
 DOMAIN,sprite-official.fp.ps.netease.com
-DOMAIN,tdid.netease.com
 DOMAIN,timejs.game.163.com
 DOMAIN,unipush.x.netease.com
 DOMAIN,unisdk.update.netease.com
@@ -71,6 +70,9 @@ DOMAIN,vod.cc.163.com
 DOMAIN,whoami.nie.netease.com
 DOMAIN,whoami.nie.tx163.com
 DOMAIN,zz.bdstatic.com
+whoami.nie.netease.com
+fp-upload.163.com
+dns.update.netease.com
 
 # > 游戏内音乐
 DOMAIN,ac.dun.163.com
@@ -106,6 +108,9 @@ DOMAIN,api.cc.163.com
 DOMAIN,cc.163.com
 DOMAIN,cc.res.netease.com
 DOMAIN,coopapi.cc.163.com
+
+# > 游戏内账号页面
+DOMAIN,vice
 
 # > Mumu
 DOMAIN,mumu.nie.netease.com
