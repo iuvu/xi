@@ -2,6 +2,7 @@
 # 规则中有一定的误伤
 #
 # ------
+
 DOMAIN,acsdk.gameyw.netease.com
 DOMAIN,ali-video-dashen.cc.netease.com
 DOMAIN,analytics.mpay.netease.com
@@ -46,6 +47,7 @@ DOMAIN,nos.gameyw.easebar.com
 DOMAIN,nos.gameyw.netease.com
 DOMAIN,nstool.321fenx.com
 DOMAIN,nstool.laiqukankan.com
+DOMAIN,nstool.netease.com
 DOMAIN,ok.166.net
 DOMAIN,optsdk.gameyw.netease.com
 DOMAIN,polyfill.166.net
