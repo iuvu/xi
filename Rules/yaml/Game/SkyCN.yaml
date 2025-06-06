@@ -110,8 +110,11 @@ payload:
  - DOMAIN,cc.res.netease.com
  - DOMAIN,coopapi.cc.163.com
 
- # > 游戏内账号页面
-DOMAIN,tdid.netease.com
+# > 游戏内账号页面
+ - DOMAIN,tdid.netease.com
+
+# > 游戏内IOS苹果账号登录域名
+# - DOMAIN,inappcheck.itunes.apple.com
 
 # > Mumu
  - DOMAIN,mumu.nie.netease.com
