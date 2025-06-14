@@ -25,6 +25,13 @@ proxy-groups:
     proxies:
       - Yily
       - DIRECT
+      
+  - name: AppleMusic
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - Yily
 
   - name: Discord
     include-all: true
@@ -88,6 +95,13 @@ rule-providers:
     interval: 86400
     path: ./ruleset/Emby.yaml
 
+  AppleMusic:
+    type: http
+    behavior: classical
+    url: "https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/AppleMusic/AppleMusic.yaml"
+    interval: 86400
+    path: ./ruleset/AppleMusic.yaml
+
   Discord:
     type: http
     behavior: classical
@@ -138,6 +152,7 @@ rules:
   - RULE-SET,SteamCN,DIRECT
   - RULE-SET,Steam,Steam
   - RULE-SET,Emby,Emby,no-resolve
+  - RULE-SET,AppleMusic,AppleMusic
   - RULE-SET,Discord,Discord
   - RULE-SET,Telegram,Telegram
   - RULE-SET,proxy,Yily
