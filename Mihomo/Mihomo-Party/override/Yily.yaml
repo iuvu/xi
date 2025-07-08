@@ -26,13 +26,6 @@ proxy-groups:
       - Yily
       - DIRECT
       
-  - name: NetEaseMusic
-    include-all: true
-    type: select
-    proxies:
-      - DIRECT
-      - Yily
-
   - name: Discord
     include-all: true
     type: select
@@ -95,13 +88,6 @@ rule-providers:
     interval: 86400
     path: ./ruleset/Emby.yaml
 
-  NetEaseMusic:
-    type: http
-    behavior: classical
-    url: "https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/NetEaseMusic/NetEaseMusic_No_Resolve.yaml"
-    interval: 86400
-    path: ./ruleset/NetEaseMusic_No_Resolve.yaml
-
   Discord:
     type: http
     behavior: classical
@@ -152,7 +138,6 @@ rules:
   - RULE-SET,SteamCN,DIRECT
   - RULE-SET,Steam,Steam
   - RULE-SET,Emby,Emby,no-resolve
-  - RULE-SET,NetEaseMusic,NetEaseMusic
   - RULE-SET,Discord,Discord
   - RULE-SET,Telegram,Telegram
   - RULE-SET,proxy,Yily
