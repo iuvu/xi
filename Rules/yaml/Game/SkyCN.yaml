@@ -47,12 +47,14 @@ payload:
  - DOMAIN,nos.gameyw.netease.com
  - DOMAIN,nstool.321fenx.com
  - DOMAIN,nstool.laiqukankan.com
+ - DOMAIN,nstool.netease.com
  - DOMAIN,ok.166.net
  - DOMAIN,optsdk.gameyw.netease.com
  - DOMAIN,polyfill.166.net
  - DOMAIN,protocol.unisdk.netease.com
  - DOMAIN,s.q.netease.com
  - DOMAIN,s3.game.163.com
+ - DOMAIN,sdlkgate.pushv3.netase.com
  - DOMAIN,sentry-dsn.166.net
  - DOMAIN,service.mkey.163.com
  - DOMAIN,sigma-buriedpoint-a19.proxima.nie.netease.com
