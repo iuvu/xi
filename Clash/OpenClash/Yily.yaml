@@ -56,10 +56,10 @@ rule-providers:
     behavior: domain
     url: https://github.com/privacy-protection-tools/anti-AD/raw/refs/heads/master/anti-ad-clash.yaml
     interval: 86400
-    Apple:
-       type: http
-    behavior: domain
-    url: https://github.com/Repcz/Tool/raw/refs/heads/X/Clash/Rules/Apple.list
+  Apple:
+    type: http
+    behavior: classical
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/Apple/Apple_Classical_No_Resolve.yaml
     interval: 86400
   Bilibili:
     type: http
