@@ -5,6 +5,7 @@ mixed-port: 7893
 allow-lan: false
 mode: rule
 log-level: info
+find-process-mode: strict
 ipv6: true
 external-controller: 0.0.0.0:9090
 clash-for-android:
@@ -50,16 +51,51 @@ experimental:
     type: select
     proxies:
       - Yily
+proxy-groups:
+  - name: Yily
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+  - name: Bilibili
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - Yily
+  - name: Steam
+    include-all: true
+    type: select
+    proxies:
+      - Yily
+      - DIRECT
+  - name: Emby
+    include-all: true
+    type: select
+    proxies:
+      - Yily
+      - DIRECT
+  - name: SkyCN
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - Yily
+  - name: Discord
+    include-all: true
+    type: select
+    proxies:
+      - Yily
+  - name: Telegram
+    include-all: true
+    type: select
+    proxies:
+      - Yily
 rule-providers:
-  reject:
-    type: http
-    behavior: domain
-    url: https://github.com/privacy-protection-tools/anti-AD/raw/refs/heads/master/anti-ad-clash.yaml
-    interval: 86400
   Apple:
     type: http
     behavior: classical
-    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/Apple/Apple_Classical_No_Resolve.yaml
+    url: https://github.com/Repcz/Tool/raw/refs/heads/X/Shadowrocket/Rules/Apple.list
     interval: 86400
   Bilibili:
     type: http
@@ -90,6 +126,11 @@ rule-providers:
     type: http
     behavior: classical
     url: https://github.com/YilyOu/Yily/raw/release/Rules/yaml/Emby.yaml
+    interval: 86400
+  SkyCN:
+    type: http
+    behavior: classical
+    url: https://github.com/YilyOu/Yily/raw/release/Rules/yaml/Game/SkyCN.yaml
     interval: 86400
   Discord:
     type: http
@@ -122,7 +163,7 @@ rule-providers:
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt
     interval: 86400
 rules:
-  - RULE-SET,reject,REJECT
+  - PROCESS-NAME,miaospeed,DIRECT
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Bilibili,Bilibili
   - RULE-SET,Microsoft,DIRECT
@@ -130,6 +171,7 @@ rules:
   - RULE-SET,SteamCN,DIRECT
   - RULE-SET,Steam,Steam
   - RULE-SET,Emby,Emby,no-resolve
+  - RULE-SET,SkyCN,SkyCN,no-resolve
   - RULE-SET,Discord,Discord
   - RULE-SET,Telegram,Telegram
   - RULE-SET,proxy,Yily
