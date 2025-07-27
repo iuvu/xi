@@ -96,7 +96,7 @@ rule-providers:
   Apple:
     type: http
     behavior: classical
-    url: https://github.com/Repcz/Tool/raw/refs/heads/X/Shadowrocket/Rules/Apple.list
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/Apple/Apple_No_Resolve.yaml
     interval: 86400
   Bilibili:
     type: http
