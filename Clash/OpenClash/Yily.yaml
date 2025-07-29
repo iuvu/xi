@@ -164,22 +164,22 @@ rule-providers:
   lancidr:
     type: http
     behavior: ipcidr
-    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt
+    url: https://github.com/Loyalsoldier/clash-rules/raw/release/lancidr.txt
     interval: 86400
 rules:
   - PROCESS-NAME,miaospeed,DIRECT
-  - RULE-SET,Apple,DIRECT
-  - RULE-SET,Bilibili,Bilibili
-  - RULE-SET,Microsoft,DIRECT
-  - RULE-SET,Copilot,Yily
-  - RULE-SET,SteamCN,DIRECT
-  - RULE-SET,Steam,Steam
+  - RULE-SET,Apple,DIRECT,no-resolve
+  - RULE-SET,Bilibili,Bilibili,no-resolve
+  - RULE-SET,Microsoft,DIRECT,no-resolve
+  - RULE-SET,Copilot,Yily,no-resolve
+  - RULE-SET,SteamCN,DIRECT,no-resolve
+  - RULE-SET,Steam,Steam,no-resolve
   - RULE-SET,Emby,Emby,no-resolve
   - RULE-SET,SkyCN,SkyCN,no-resolve
-  - RULE-SET,Discord,Discord
-  - RULE-SET,Telegram,Telegram
-  - RULE-SET,proxy,Yily
-  - RULE-SET,direct,DIRECT
+  - RULE-SET,Discord,Discord,no-resolve
+  - RULE-SET,Telegram,Telegram,no-resolve
+  - RULE-SET,proxy,Yily,no-resolve
+  - RULE-SET,direct,DIRECT,no-resolve
   - RULE-SET,cncidr,DIRECT,no-resolve
   - RULE-SET,lancidr,DIRECT,no-resolve
   - MATCH,Yily
