@@ -78,33 +78,33 @@ DOMAIN,whoami.nie.tx163.com
 DOMAIN,zz.bdstatic.com
 
 # > 游戏内音乐
-DOMAIN,ac.dun.163.com
-DOMAIN,acstatic-dun.126.net
-DOMAIN,clientlogusf.music.163.com
-DOMAIN,cstaticdun.126.net
-DOMAIN,da.dun.163.com
-DOMAIN,dl.reg.163.com
-DOMAIN,dl.reg.163.com
-DOMAIN,ens=try-proxy.music.163.com
-DOMAIN,fl.reg.163.com
-DOMAIN,fl.reg.163.com
-DOMAIN,i202.music.126.net
-DOMAIN,interface.music.163.com
-DOMAIN,music.163.com
-DOMAIN,nos.netease.com
-DOMAIN,p1.music.126.net
-DOMAIN,p2.music.126.net
-DOMAIN,p3.music.126.net
-DOMAIN,p4.music.126.net
-DOMAIN,pr.nss.netease.com
-DOMAIN,s5.music.126.net
-DOMAIN,s6.music.126.net
-DOMAIN,sentry.music.126.net
-DOMAIN,st.music.163.com
-DOMAIN,urswebzj.nosdn.127.net
-DOMAIN,webzjac.reg.163.com
-DOMAIN,webzjcaptcha.reg.163.com
-DOMAIN,ye.dun.163yun.com
+# DOMAIN,ac.dun.163.com
+# DOMAIN,acstatic-dun.126.net
+# DOMAIN,clientlogusf.music.163.com
+# DOMAIN,cstaticdun.126.net
+# DOMAIN,da.dun.163.com
+# DOMAIN,dl.reg.163.com
+# DOMAIN,dl.reg.163.com
+# DOMAIN,ens=try-proxy.music.163.com
+# DOMAIN,fl.reg.163.com
+# DOMAIN,fl.reg.163.com
+# DOMAIN,i202.music.126.net
+# DOMAIN,interface.music.163.com
+# DOMAIN,music.163.com
+# DOMAIN,nos.netease.com
+# DOMAIN,p1.music.126.net
+# DOMAIN,p2.music.126.net
+# DOMAIN,p3.music.126.net
+# DOMAIN,p4.music.126.net
+# DOMAIN,pr.nss.netease.com
+# DOMAIN,s5.music.126.net
+# DOMAIN,s6.music.126.net
+# DOMAIN,sentry.music.126.net
+# DOMAIN,st.music.163.com
+# DOMAIN,urswebzj.nosdn.127.net
+# DOMAIN,webzjac.reg.163.com
+# DOMAIN,webzjcaptcha.reg.163.com
+# DOMAIN,ye.dun.163yun.com
 
 # > 游戏内直播
 DOMAIN,api.cc.163.com
