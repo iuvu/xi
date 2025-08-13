@@ -57,6 +57,7 @@ payload:
  - DOMAIN-SUFFIX,lilyyaya.top
  - DOMAIN-SUFFIX,loseremby.org
  - DOMAIN-SUFFIX,misakaf.org
+ - DOMAIN-SUFFIX,mobai.sbs
  - DOMAIN-SUFFIX,niceduck.lol
  - DOMAIN-SUFFIX,niceduck.me
  - DOMAIN-SUFFIX,nijigem.by
@@ -78,3 +79,4 @@ payload:
  - IP-CIDR,45.196.236.212/32
  - IP-CIDR,5.45.109.91/32
  - IP-CIDR,50.114.155.150/32
+
