@@ -1,10 +1,11 @@
 # Speedtest 中国大陆
 # 可莉日常 : t.me/ibilibili
-# UpdateTime：2025-09-09 22:38:24
-# RuleCount：7
+# UpdateTime：2025-09-12 01:59:13
+# RuleCount：8
 payload:
   - DOMAIN,cesu-hz.zjtelecom.com.cn
   - DOMAIN,cesu-nb.zjtelecom.com.cn
+  - DOMAIN,speedtest1.online.sh.cn
   - DOMAIN,speedtest.jsqiuying.com
   - DOMAIN,mobile.shunicomtest.com
   - DOMAIN,4gsuzhou1.speedtest.jsinfo.net
