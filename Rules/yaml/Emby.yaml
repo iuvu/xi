@@ -17,11 +17,12 @@
 # SNTP (守候网络) & GuGu
 # Stupid melon (不吃呆瓜)
 # Terminus (终点站)
-# TreeDiagram (树状图)
+# TreeDiagram (树状图	
 # UHD & RFCHOST
 # XMAX
 # YkkCloud & 1111 (垃圾影音,Loser)
 # Yomo (Yomo服不服)
+# YXIO
 # Zox/Ac
 # ZoxFree
 # 阿甘
@@ -76,6 +77,7 @@ payload:
  - DOMAIN-SUFFIX,xmax.vip
  - DOMAIN-SUFFIX,xmsl.org
  - DOMAIN-SUFFIX,yezi.my
+ - DOMAIN-SUFFIX,yixia.io
  - DOMAIN-SUFFIX,yomo.lol
  - DOMAIN-SUFFIX,zox.show
  - IP-CIDR,100.42.230.169/32
@@ -87,5 +89,6 @@ payload:
  - IP-CIDR,45.196.236.212/32
  - IP-CIDR,5.45.109.91/32
  - IP-CIDR,50.114.155.150/32
+
 
 
