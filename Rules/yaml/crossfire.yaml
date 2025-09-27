@@ -1,0 +1,15 @@
+payload:
+ - DOMAIN,web-img.cf.qq.com
+ - DOMAIN,apps.game.qq.com
+ - DOMAIN,tqos.anticheatexpert.com
+ - DOMAIN,cn.voice.gcloudcs.com
+ 
+# 南方大区 深圳
+ - DOMAIN,318-mm-196189288.cf.qq.com
+
+ - IP-CIDR,122.96.0.0/15
+ - IP-CIDR,153.3.0.0/16
+ - IP-CIDR,182.50.8.0/21
+ - IP-CIDR,157.255.216.0/22
+ - IP-CIDR,140.206.161.0/24
+ - IP-CIDR,58.254.165.0/24
