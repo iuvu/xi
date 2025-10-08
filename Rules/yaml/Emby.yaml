@@ -33,6 +33,7 @@
 #
 # ------
 payload:
+ - DOMAIN,speedtest-babybus.apple-cdn.net
  - DOMAIN-SUFFIX,023168.xyz
  - DOMAIN-SUFFIX,1024.name
  - DOMAIN-SUFFIX,123456.al
@@ -89,6 +90,7 @@ payload:
  - IP-CIDR,45.196.236.212/32
  - IP-CIDR,5.45.109.91/32
  - IP-CIDR,50.114.155.150/32
+
 
 
 
