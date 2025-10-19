@@ -166,7 +166,7 @@ rules:
   - RULE-SET,Apple,DIRECT,no-resolve
   - RULE-SET,Bilibili,Bilibili,no-resolve
   - RULE-SET,Microsoft,DIRECT,no-resolve
-  - RULE-SET,Copilot,Yily,no-resolve
+  - RULE-SET,Copilot,xi,no-resolve
   - RULE-SET,SteamCN,DIRECT,no-resolve
   - RULE-SET,Steam,Steam,no-resolve
   - RULE-SET,Emby,Emby,no-resolve
