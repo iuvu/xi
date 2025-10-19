@@ -7,7 +7,7 @@ external-controller: 127.0.0.1:9090
 proxies:
   - {name:			}}
 proxy-groups:
-  - name: Yily
+  - name: xi
     type: select
     proxies:
       - 
