@@ -2,7 +2,7 @@ port: 7890
 socks-port: 7891
 redir-port: 7892
 mixed-port: 7893
-allow-lan: false
+allow-lan: true
 mode: rule
 log-level: info
 find-process-mode: strict
@@ -14,6 +14,41 @@ profile:
   tracing: true
 experimental:
   sniff-tls-sni: true
+dns:
+  enable: true
+  respect-rules: true
+  ipv6: true
+  enhanced-mode: redir-host
+  default-nameserver:
+  - 
+  nameserver:
+  - 
+  proxy-server-nameserver:
+  - 
+  nameserver-policy:
+    geosite:cn,private:
+    - 
+    geosite:geolocation-!cn:
+    - 
+  direct-nameserver:
+  - 
+
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  force-dns-mapping: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain: []
+  skip-dst-address:
+
 hosts:
 # App Store 下载请求解析 金山CDN
 'iosapps.itunes.apple.com':  iosapps.itunes.apple.com.download.ks-cdn.com
@@ -22,7 +57,7 @@ hosts:
   - type: ss
 
   proxy-groups:
-  - name: Yily
+  - name: xi
     include-all: true
     type: select
     proxies:
@@ -32,69 +67,35 @@ hosts:
     type: select
     proxies:
       - DIRECT
-      - Yily
+      - xi
   - name: Steam
     include-all: true
     type: select
     proxies:
-      - Yily
+      - xi
       - DIRECT
   - name: Emby
     include-all: true
     type: select
     proxies:
-      - Yily
-      - DIRECT
-  - name: Discord
-    include-all: true
-    type: select
-    proxies:
-      - Yily
-  - name: Telegram
-    include-all: true
-    type: select
-    proxies:
-      - Yily
-proxy-groups:
-  - name: Yily
-    include-all: true
-    type: select
-    proxies:
-      - DIRECT
-  - name: Bilibili
-    include-all: true
-    type: select
-    proxies:
-      - DIRECT
-      - Yily
-  - name: Steam
-    include-all: true
-    type: select
-    proxies:
-      - Yily
-      - DIRECT
-  - name: Emby
-    include-all: true
-    type: select
-    proxies:
-      - Yily
+      - xi
       - DIRECT
   - name: SkyCN
     include-all: true
     type: select
     proxies:
       - DIRECT
-      - Yily
+      - xi
   - name: Discord
     include-all: true
     type: select
     proxies:
-      - Yily
+      - xi
   - name: Telegram
     include-all: true
     type: select
     proxies:
-      - Yily
+      - xi
 rule-providers:
   Apple:
     type: http
@@ -129,12 +130,12 @@ rule-providers:
   Emby:
     type: http
     behavior: classical
-    url: https://github.com/YilyOu/Yily/raw/release/Rules/yaml/Emby.yaml
+    url: https://github.com/xiikiss/xi/raw/release/Rules/yaml/Emby.yaml
     interval: 86400
   SkyCN:
     type: http
     behavior: classical
-    url: https://github.com/YilyOu/Yily/raw/release/Rules/yaml/Game/SkyCN.yaml
+    url: https://github.com/xiikiss/xi/raw/release/Rules/yaml/Game/SkyCN.yaml
     interval: 86400
   Discord:
     type: http
@@ -162,7 +163,6 @@ rule-providers:
     url: https://github.com/Loyalsoldier/clash-rules/raw/release/lancidr.txt
     interval: 86400
 rules:
-  - PROCESS-NAME,miaospeed,DIRECT
   - RULE-SET,Apple,DIRECT,no-resolve
   - RULE-SET,Bilibili,Bilibili,no-resolve
   - RULE-SET,Microsoft,DIRECT,no-resolve
@@ -176,4 +176,4 @@ rules:
   - RULE-SET,direct,DIRECT,no-resolve
   - RULE-SET,cncidr,DIRECT,no-resolve
   - RULE-SET,lancidr,DIRECT,no-resolve
-  - MATCH,Yily
+  - MATCH,xi
