@@ -56,66 +56,16 @@ hosts:
 proxies:
   - type: ss
 
-proxy-groups:
-  - name: xi
-    include-all: true
-    type: select
-    proxies:
-      - DIRECT
-  - name: AppleTV
-    include-all: true
-    type: select
-    proxies:
-      - xi
-  - name: Bilibili
-    include-all: true
-    type: select
-    proxies:
-      - DIRECT
-      - xi
-  - name: YouTube
-    include-all: true
-    type: select
-    proxies:
-      - xi
-  - name: Steam
-    include-all: true
-    type: select
-    proxies:
-      - xi
-      - DIRECT
-  - name: Emby
-    include-all: true
-    type: select
-    proxies:
-      - xi
-      - DIRECT
-  - name: SkyCN
-    include-all: true
-    type: select
-    proxies:
-      - DIRECT
-      - xi
-  - name: Discord
-    include-all: true
-    type: select
-    proxies:
-      - xi
-  - name: Telegram
-    include-all: true
-    type: select
-    proxies:
-      - xi
 rule-providers:
-  Apple:
-    type: http
-    behavior: classical
-    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/Apple/Apple_Classical_No_Resolve.yaml
-    interval: 86400
   AppleTV:
     type: http
     behavior: classical
     url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/AppleTV/AppleTV_No_Resolve.yaml
+    interval: 86400
+  Apple:
+    type: http
+    behavior: classical
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/Apple/Apple_Classical_No_Resolve.yaml
     interval: 86400
   Bilibili:
     type: http
@@ -183,8 +133,8 @@ rule-providers:
     url: https://github.com/Loyalsoldier/clash-rules/raw/release/lancidr.txt
     interval: 86400
 rules:
-  - RULE-SET,Apple,DIRECT,no-resolve
   - RULE-SET,AppleTV,AppleTV,no-resolve
+  - RULE-SET,Apple,DIRECT,no-resolve
   - RULE-SET,Bilibili,Bilibili,no-resolve
   - RULE-SET,YouTube,YouTube,no-resolve
   - RULE-SET,Microsoft,DIRECT,no-resolve
