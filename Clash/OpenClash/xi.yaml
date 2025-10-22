@@ -53,10 +53,10 @@ hosts:
 # App Store 下载请求解析 金山CDN
 'iosapps.itunes.apple.com':  iosapps.itunes.apple.com.download.ks-cdn.com
   
-  proxies:
+proxies:
   - type: ss
 
-  proxy-groups:
+proxy-groups:
   - name: xi
     include-all: true
     type: select
