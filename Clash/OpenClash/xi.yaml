@@ -57,10 +57,10 @@ proxies:
   - type: ss
 
 rule-providers:
-  AppleTV:
+  AppleProxy:
     type: http
     behavior: classical
-    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/AppleTV/AppleTV_No_Resolve.yaml
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/AppleProxy/AppleProxy_No_Resolve.yaml
     interval: 86400
   Apple:
     type: http
@@ -133,7 +133,7 @@ rule-providers:
     url: https://github.com/Loyalsoldier/clash-rules/raw/release/lancidr.txt
     interval: 86400
 rules:
-  - RULE-SET,AppleTV,AppleTV,no-resolve
+  - RULE-SET,AppleProxy,AppleProxy,no-resolve
   - RULE-SET,Apple,DIRECT,no-resolve
   - RULE-SET,Bilibili,Bilibili,no-resolve
   - RULE-SET,YouTube,YouTube,no-resolve
