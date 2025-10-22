@@ -62,11 +62,21 @@ hosts:
     type: select
     proxies:
       - DIRECT
+  - name: AppleTV
+    include-all: true
+    type: select
+    proxies:
+      - xi
   - name: Bilibili
     include-all: true
     type: select
     proxies:
       - DIRECT
+      - xi
+  - name: YouTube
+    include-all: true
+    type: select
+    proxies:
       - xi
   - name: Steam
     include-all: true
