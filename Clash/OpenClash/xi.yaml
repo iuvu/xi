@@ -56,6 +56,56 @@ hosts:
 proxies:
   - type: ss
 
+proxy-groups:
+  - name: xi
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+  - name: AppleProxy
+    include-all: true
+    type: select
+    proxies:
+      - xi
+  - name: Bilibili
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - xi
+  - name: YouTube
+    include-all: true
+    type: select
+    proxies:
+      - xi
+  - name: Steam
+    include-all: true
+    type: select
+    proxies:
+      - xi
+      - DIRECT
+  - name: Emby
+    include-all: true
+    type: select
+    proxies:
+      - xi
+      - DIRECT
+  - name: SkyCN
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - xi
+  - name: Discord
+    include-all: true
+    type: select
+    proxies:
+      - xi
+  - name: Telegram
+    include-all: true
+    type: select
+    proxies:
+      - xi
 rule-providers:
   AppleProxy:
     type: http
