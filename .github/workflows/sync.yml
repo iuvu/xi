@@ -19,7 +19,7 @@ on:
         description: '复制目标路径（多个路径用逗号分隔）'
         required: true
         default: 'Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list'
-Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml
+
 jobs:
   transform-and-copy:
     runs-on: ubuntu-latest
