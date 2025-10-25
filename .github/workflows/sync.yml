@@ -161,31 +161,11 @@ jobs:
         if git diff --staged --quiet; then
           echo "没有检测到文件更改"
         else
-          # 构建详细的提交信息
-          COMMIT_MESSAGE="Auto: Transform and copy files via GitHub Actions
+          # 使用简单的提交信息避免语法问题
+          COMMIT_MSG="Auto: Transform files - ${{ github.event.inputs.target_files }}"
           
-# 文件转换和复制操作：
-- 源文件: ${{ github.event.inputs.target_files }}
-- 目标文件: ${{ github.event.inputs.copy_destinations }}
-
-字符替换操作："
-
-          # 添加所有字符替换步骤到提交信息
-          for group_index in "${!SEARCH_GROUPS[@]}"; do
-            SEARCH_GROUP=(${SEARCH_GROUPS[$group_index]//,/ })
-            REPLACE_GROUP=(${REPLACE_GROUPS[$group_index]//,/ })
-            
-            COMMIT_MESSAGE="$COMMIT_MESSAGE"$'\n'"- 替换组 $((group_index+1)): "
-            
-            for char_index in "${!SEARCH_GROUP[@]}"; do
-              SEARCH="${SEARCH_GROUP[$char_index]}"
-              REPLACE="${REPLACE_GROUP[$char_index]}"
-              COMMIT_MESSAGE="$COMMIT_MESSAGE"'\"'"$SEARCH"'\"'">"'\"'"$REPLACE"'\"'" "
-            done
-          done
-
           # 提交更改
-          git commit -m "$COMMIT_MESSAGE"
+          git commit -m "$COMMIT_MSG"
           
           # 推送更改
           git push
