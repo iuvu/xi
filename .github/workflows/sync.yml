@@ -190,3 +190,4 @@ jobs:
             echo "    '${SEARCH_GROUP[$char_index]}' -> '${REPLACE_GROUP[$char_index]}'"
           done
         done
+        done
