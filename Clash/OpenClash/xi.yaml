@@ -1,0 +1,201 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+allow-lan: true
+mode: rule
+log-level: info
+find-process-mode: strict
+ipv6: true
+external-controller: 0.0.0.0:9090
+clash-for-android:
+  append-system-dns: false
+profile:
+  tracing: true
+experimental:
+  sniff-tls-sni: true
+dns:
+  enable: true
+  respect-rules: true
+  ipv6: true
+  enhanced-mode: redir-host
+  default-nameserver:
+  - 
+  nameserver:
+  - 
+  proxy-server-nameserver:
+  - 
+  nameserver-policy:
+    geosite:cn,private:
+    - 
+    geosite:geolocation-!cn:
+    - 
+  direct-nameserver:
+  - 
+
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  force-dns-mapping: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain: []
+  skip-dst-address:
+
+hosts:
+# App Store 下载请求解析 金山CDN
+'iosapps.itunes.apple.com':  iosapps.itunes.apple.com.download.ks-cdn.com
+  
+proxies:
+  - type: ss
+
+proxy-groups:
+  - name: xi
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+  - name: AppleProxy
+    include-all: true
+    type: select
+    proxies:
+      - xi
+  - name: Bilibili
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - xi
+  - name: YouTube
+    include-all: true
+    type: select
+    proxies:
+      - xi
+  - name: Steam
+    include-all: true
+    type: select
+    proxies:
+      - xi
+      - DIRECT
+  - name: Emby
+    include-all: true
+    type: select
+    proxies:
+      - xi
+      - DIRECT
+  - name: SkyCN
+    include-all: true
+    type: select
+    proxies:
+      - DIRECT
+      - xi
+  - name: Discord
+    include-all: true
+    type: select
+    proxies:
+      - xi
+  - name: Telegram
+    include-all: true
+    type: select
+    proxies:
+      - xi
+rule-providers:
+  AppleProxy:
+    type: http
+    behavior: classical
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/AppleProxy/AppleProxy_No_Resolve.yaml
+    interval: 86400
+  Apple:
+    type: http
+    behavior: classical
+    url: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/Apple/Apple_Classical_No_Resolve.yaml
+    interval: 86400
+  Bilibili:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili_No_Resolve.yaml
+    interval: 86400
+  YouTube:
+    type: http
+    behavior: classical
+    url: hhttps://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Clash/YouTube/YouTube_No_Resolve.yaml
+    interval: 86400
+  Microsoft:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft_No_Resolve.yaml
+    interval: 86400
+  Copilot:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Copilot/Copilot_No_Resolve.yaml
+    interval: 86400
+  SteamCN:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/SteamCN/SteamCN_No_Resolve.yaml
+    interval: 86400
+  Steam:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Steam/Steam_No_Resolve.yaml
+    interval: 86400
+  Emby:
+    type: http
+    behavior: classical
+    url: https://github.com/iuvu/xi/raw/release/Rules/yaml/Emby.yaml
+    interval: 86400
+  SkyCN:
+    type: http
+    behavior: classical
+    url: https://github.com/iuvu/xi/raw/release/Rules/yaml/Game/SkyCN.yaml
+    interval: 86400
+  Discord:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Discord/Discord_No_Resolve.yaml
+    interval: 86400
+  Telegram:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram_No_Resolve.yaml
+    interval: 86400
+  direct:
+    type: http
+    behavior: domain
+    url: https://github.com/Loyalsoldier/clash-rules/raw/release/direct.txt
+    interval: 86400
+  cncidr:
+    type: http
+    behavior: ipcidr
+    url: https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/cncidr.txt
+    interval: 86400
+  lancidr:
+    type: http
+    behavior: ipcidr
+    url: https://github.com/Loyalsoldier/clash-rules/raw/release/lancidr.txt
+    interval: 86400
+rules:
+  - RULE-SET,AppleProxy,AppleProxy,no-resolve
+  - RULE-SET,Apple,DIRECT,no-resolve
+  - RULE-SET,Bilibili,Bilibili,no-resolve
+  - RULE-SET,YouTube,YouTube,no-resolve
+  - RULE-SET,Microsoft,DIRECT,no-resolve
+  - RULE-SET,Copilot,xi,no-resolve
+  - RULE-SET,SteamCN,DIRECT,no-resolve
+  - RULE-SET,Steam,Steam,no-resolve
+  - RULE-SET,Emby,Emby,no-resolve
+  - RULE-SET,SkyCN,SkyCN,no-resolve
+  - RULE-SET,Discord,Discord,no-resolve
+  - RULE-SET,Telegram,Telegram,no-resolve
+  - RULE-SET,direct,DIRECT,no-resolve
+  - RULE-SET,cncidr,DIRECT,no-resolve
+  - RULE-SET,lancidr,DIRECT,no-resolve
+  - MATCH,xi

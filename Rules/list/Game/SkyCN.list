@@ -1,0 +1,167 @@
+# Sky光遇 (Sky: Children of the Light) - 网易 (Netease)
+# 规则中有一定的误伤
+#
+# ------
+
+DOMAIN,acsdk.gameyw.netease.com
+DOMAIN,ali-video-dashen.cc.netease.com
+DOMAIN,analytics.mpay.netease.com
+DOMAIN,api.ds.163.com
+DOMAIN,api.gmsdk.gameyw.netease.com
+DOMAIN,appdump.nie.netease.com
+DOMAIN,applog.matrix.netease.com
+DOMAIN,bee.tc.netease.com
+DOMAIN,bind-mobile.g.mkey.163.com
+DOMAIN,data-detect.nie.netease.com
+DOMAIN,dns.update.netease.com
+DOMAIN,dns.update.netease.com
+DOMAIN,drpf-ma75.proxima.nie.netease.com
+DOMAIN,drpf-unisdk.proxima.nie.netease.com
+DOMAIN,ds.res.netease.com
+DOMAIN,fp-upload.163.com
+DOMAIN,fp-upload.dun.163.com
+DOMAIN,g.166.net
+DOMAIN,g0.gsf.netease.com
+DOMAIN,gmsdk.gameyw.netease.com
+DOMAIN,god.gameyw.netease.com
+DOMAIN,h5.ds.163.com
+DOMAIN,img.166.net
+DOMAIN,impression.update.netease.com
+DOMAIN,kefu.16163.com
+DOMAIN,live-as-sky-merge.game.163.com
+DOMAIN,live-auth-sky-merge.game.163.com
+DOMAIN,live-gms-sky-merge.game.163.com
+DOMAIN,live-queue-sky-merge.game.163.com
+DOMAIN,live-ws-sky-merge.game.163.com
+DOMAIN,ma75.appdump.nie.netease.com
+DOMAIN,ma75.fp.ps.netease.com
+DOMAIN,ma75.gsf.netease.com
+DOMAIN,ma75.list.inner.netease.com
+DOMAIN,ma75.update.netease.com
+DOMAIN,mailbox.g.mkey.163.com
+DOMAIN,mgbsdk.matrix.netease.com
+DOMAIN,mpay-translation.g.mkey.163.com
+DOMAIN,netlink-sigma.proxima.nie.netease.com
+DOMAIN,nie.res.netease.com
+DOMAIN,nos.gameyw.easebar.com
+DOMAIN,nos.gameyw.netease.com
+DOMAIN,nstool.321fenx.com
+DOMAIN,nstool.laiqukankan.com
+DOMAIN,nstool.netease.com
+DOMAIN,ok.166.net
+DOMAIN,optsdk.gameyw.netease.com
+DOMAIN,polyfill.166.net
+DOMAIN,protocol.unisdk.netease.com
+DOMAIN,s.q.netease.com
+DOMAIN,s3.game.163.com
+DOMAIN,sdlkgate.pushv3.netase.com
+DOMAIN,sentry-dsn.166.net
+DOMAIN,service.mkey.163.com
+DOMAIN,sigma-buriedpoint-a19.proxima.nie.netease.com
+DOMAIN,sigma-buriedpoint-opd.proxima.nie.netease.com
+DOMAIN,sigma-clientoptimize-ma75.proxima.nie.netease.com
+DOMAIN,sigma-csp-opd.proxima.nie.netease.com
+DOMAIN,sigma-lgd-ma75.proxima.nie.netease.com
+DOMAIN,sky.h5.163.com
+DOMAIN,sky.res.netease.com
+DOMAIN,sky.v.netease.com
+DOMAIN,sprite.16163.com
+DOMAIN,sprite.gameyw.netease.com
+DOMAIN,sprite-official.fp.ps.netease.com
+DOMAIN,timejs.game.163.com
+DOMAIN,unipush.x.netease.com
+DOMAIN,unisdk.update.netease.com
+DOMAIN,vod.cc.163.com
+DOMAIN,whoami.nie.netease.com
+DOMAIN,whoami.nie.netease.com
+DOMAIN,whoami.nie.tx163.com
+DOMAIN,zz.bdstatic.com
+
+# > 游戏内音乐
+# DOMAIN,ac.dun.163.com
+# DOMAIN,acstatic-dun.126.net
+# DOMAIN,clientlogusf.music.163.com
+# DOMAIN,cstaticdun.126.net
+# DOMAIN,da.dun.163.com
+# DOMAIN,dl.reg.163.com
+# DOMAIN,dl.reg.163.com
+# DOMAIN,ens=try-proxy.music.163.com
+# DOMAIN,fl.reg.163.com
+# DOMAIN,fl.reg.163.com
+# DOMAIN,i202.music.126.net
+# DOMAIN,interface.music.163.com
+# DOMAIN,music.163.com
+# DOMAIN,nos.netease.com
+# DOMAIN,p1.music.126.net
+# DOMAIN,p2.music.126.net
+# DOMAIN,p3.music.126.net
+# DOMAIN,p4.music.126.net
+# DOMAIN,pr.nss.netease.com
+# DOMAIN,s5.music.126.net
+# DOMAIN,s6.music.126.net
+# DOMAIN,sentry.music.126.net
+# DOMAIN,st.music.163.com
+# DOMAIN,urswebzj.nosdn.127.net
+# DOMAIN,webzjac.reg.163.com
+# DOMAIN,webzjcaptcha.reg.163.com
+# DOMAIN,ye.dun.163yun.com
+
+# > 游戏内直播
+DOMAIN,api.cc.163.com
+DOMAIN,cc.163.com
+DOMAIN,cc.res.netease.com
+DOMAIN,coopapi.cc.163.com
+
+# > 游戏内账号页面
+DOMAIN,tdid.netease.com
+
+# > 游戏内IOS苹果账号登录域名
+# DOMAIN,inappcheck.itunes.apple.com
+
+# > Mumu
+DOMAIN,mumu.nie.netease.com
+DOMAIN,unisec-inner.nie.netease.com
+
+# > 华为渠道服
+DOMAIN,gate.push.x.netease.com
+DOMAIN,hwid-drcn.platform.hicloud.com
+DOMAIN,oauth-login-drcn.platform.dbankcloud.com
+DOMAIN,openlocation-drcn.platform.dbankcloud.com
+DOMAIN,realname-drcn.platform.dbankcloud.com
+DOMAIN,sigma-statistics-push.proxima.nie.netease.com
+DOMAIN,store-dre.hispace.dbankcloud.cn
+DOMAIN,tsms-drcn.security.dbankcloud.cn
+
+IP-CIDR,61.157.0.0/16
+IP-CIDR,124.70.0.0/17
+IP-CIDR,42.186.128.0/17
+IP-CIDR,42.186.0.0/17
+IP-CIDR,115.236.128.0/19
+IP-CIDR,45.253.176.0/20
+IP-CIDR,45.253.152.0/21
+IP-CIDR,59.111.40.0/21
+IP-CIDR,103.71.201.0/24
+IP-CIDR,223.252.212.0/24
+
+# > 联通
+IP-CIDR,101.67.0.0/16
+IP-CIDR,101.71.0.0/16
+
+# > 华为渠道服
+IP-CIDR,121.36.0.0/17
+IP-CIDR,49.4.32.0/20
+IP-CIDR,45.253.152.0/21
+ 
+# > 联通
+IP-CIDR6,2408:8740:c1fc:401::6543:0/64
+IP-CIDR6,2408:8740:c1fc:401::6547:0/64
+
+IP-CIDR6,240e:f7:8017:1::2414:0/64
+IP-CIDR6,240e:f7:8017:1::3cbf:0/64
+IP-CIDR6,240e:f7:8017:1::73ec:0/64
+IP-CIDR6,240e:f7:8017:1::73ee:0/64
+IP-CIDR6,2407:ad80:1013:e001::2aba:0/64
+IP-CIDR6,2407:ad80:1013:e001::2dfd:0/64
+
+USER-AGENT,com.netease.sky
+USER-AGENT,cpp-httplib
