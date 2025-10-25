@@ -150,12 +150,12 @@ rule-providers:
   Emby:
     type: http
     behavior: classical
-    url: https://github.com/iuvu/xi/raw/main/Rules/yaml/Emby.yaml
+    url: https://github.com/iuvu/xi/raw/release/Rules/yaml/Emby.yaml
     interval: 86400
   SkyCN:
     type: http
     behavior: classical
-    url: https://github.com/iuvu/xi/raw/main/Rules/yaml/Game/SkyCN.yaml
+    url: https://github.com/iuvu/xi/raw/release/Rules/yaml/Game/SkyCN.yaml
     interval: 86400
   Discord:
     type: http
