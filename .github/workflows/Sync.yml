@@ -164,7 +164,7 @@ jobs:
           # 构建详细的提交信息
           COMMIT_MESSAGE="Auto: Transform and copy files via GitHub Actions
           
-文件转换和复制操作：
+# 文件转换和复制操作：
 - 源文件: ${{ github.event.inputs.target_files }}
 - 目标文件: ${{ github.event.inputs.copy_destinations }}
 
