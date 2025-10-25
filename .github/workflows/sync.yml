@@ -1,0 +1,212 @@
+name: File Transformation and Copy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_files:
+        description: '要处理的文件路径（多个文件用逗号分隔）'
+        required: true
+        default: 'Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list'
+      search_chars:
+        description: '要查找的字符（多个字符用逗号分隔，支持多组替换用分号分隔）'
+        required: true
+        default: 'DOMAIN,,DOMAIN-SUFFIX,,DOMAIN-KEYWORD,,IP-CIDR,,IP-CIDR6,'
+      replace_chars:
+        description: '替换的字符（与查找字符一一对应，多组替换用分号分隔）'
+        required: true
+        default: ' - DOMAIN,, - DOMAIN-SUFFIX,, - DOMAIN-KEYWORD,, - IP-CIDR,, - IP-CIDR6,'
+      copy_destinations:
+        description: '复制目标路径（多个路径用逗号分隔）'
+        required: true
+        default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml'
+
+jobs:
+  transform-and-copy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up environment
+      run: |
+        # 将输入参数转换为数组
+        echo "TARGET_FILES=(${INPUT_TARGET_FILES//,/ })" >> $GITHUB_ENV
+        echo "SEARCH_GROUPS=(${INPUT_SEARCH_CHARS//;/ })" >> $GITHUB_ENV
+        echo "REPLACE_GROUPS=(${INPUT_REPLACE_CHARS//;/ })" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=(${INPUT_COPY_DESTINATIONS//,/ })" >> $GITHUB_ENV
+      env:
+        INPUT_TARGET_FILES: ${{ github.event.inputs.target_files }}
+        INPUT_SEARCH_CHARS: ${{ github.event.inputs.search_chars }}
+        INPUT_REPLACE_CHARS: ${{ github.event.inputs.replace_chars }}
+        INPUT_COPY_DESTINATIONS: ${{ github.event.inputs.copy_destinations }}
+    
+    - name: Validate input lengths
+      run: |
+        # 检查查找组和替换组数量是否匹配
+        if [ ${#SEARCH_GROUPS[@]} -ne ${#REPLACE_GROUPS[@]} ]; then
+          echo "错误：查找组数量(${#SEARCH_GROUPS[@]})与替换组数量(${#REPLACE_GROUPS[@]})不匹配"
+          exit 1
+        fi
+        
+        # 检查每组内的字符数量是否匹配
+        for i in "${!SEARCH_GROUPS[@]}"; do
+          SEARCH_GROUP=(${SEARCH_GROUPS[$i]//,/ })
+          REPLACE_GROUP=(${REPLACE_GROUPS[$i]//,/ })
+          
+          if [ ${#SEARCH_GROUP[@]} -ne ${#REPLACE_GROUP[@]} ]; then
+            echo "错误：第$((i+1))组中查找字符数量(${#SEARCH_GROUP[@]})与替换字符数量(${#REPLACE_GROUP[@]})不匹配"
+            exit 1
+          fi
+        done
+        
+        # 检查目标文件和复制路径数量是否匹配
+        if [ ${#TARGET_FILES[@]} -ne ${#COPY_DESTINATIONS[@]} ]; then
+          echo "错误：目标文件数量(${#TARGET_FILES[@]})与复制路径数量(${#COPY_DESTINATIONS[@]})不匹配"
+          exit 1
+        fi
+        echo "输入验证通过"
+    
+    - name: Transform and copy files
+      run: |
+        # 遍历所有目标文件
+        for i in "${!TARGET_FILES[@]}"; do
+          SOURCE_FILE="${TARGET_FILES[$i]}"
+          DEST_FILE="${COPY_DESTINATIONS[$i]}"
+          
+          echo "正在处理文件: $SOURCE_FILE -> $DEST_FILE"
+          
+          # 检查源文件是否存在
+          if [ ! -f "$SOURCE_FILE" ]; then
+            echo "警告：源文件 $SOURCE_FILE 不存在，跳过"
+            continue
+          fi
+          
+          # 创建目标目录（如果不存在）
+          mkdir -p "$(dirname "$DEST_FILE")"
+          
+          # 读取源文件内容
+          CONTENT=$(cat "$SOURCE_FILE")
+          ORIGINAL_CONTENT="$CONTENT"
+          
+          echo "=== 字符替换详情 ==="
+          
+          # 遍历所有替换组
+          for group_index in "${!SEARCH_GROUPS[@]}"; do
+            SEARCH_GROUP=(${SEARCH_GROUPS[$group_index]//,/ })
+            REPLACE_GROUP=(${REPLACE_GROUPS[$group_index]//,/ })
+            
+            echo "--- 替换组 $((group_index+1)) ---"
+            
+            # 执行当前组的一对一字符替换
+            for char_index in "${!SEARCH_GROUP[@]}"; do
+              SEARCH="${SEARCH_GROUP[$char_index]}"
+              REPLACE="${REPLACE_GROUP[$char_index]}"
+              
+              # 记录替换前的状态
+              OLD_CONTENT="$CONTENT"
+              CONTENT="${CONTENT//$SEARCH/$REPLACE}"
+              
+              # 统计替换次数
+              OLD_COUNT=$(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l || true)
+              NEW_COUNT=$(echo "$CONTENT" | grep -o "$SEARCH" | wc -l || true)
+              REPLACED_COUNT=$((OLD_COUNT - NEW_COUNT))
+              
+              echo "替换 '$SEARCH' -> '$REPLACE': 替换了 $REPLACED_COUNT 次"
+              
+              # 修改位置标记 - 字符替换
+              echo "修改位置: 字符级别替换 - 文件 '$SOURCE_FILE' 中的字符 '$SEARCH' 替换为 '$REPLACE' (组$((group_index+1)))"
+            done
+          done
+          
+          # 检查内容是否有变化
+          if [ "$ORIGINAL_CONTENT" == "$CONTENT" ]; then
+            echo "文件内容未发生变化"
+          else
+            echo "文件内容已更新"
+          fi
+          
+          # 将转换后的内容写入目标文件
+          echo "$CONTENT" > "$DEST_FILE"
+          echo "文件已复制到: $DEST_FILE"
+          
+          # 复制文件路径标记
+          echo "复制文件路径: $SOURCE_FILE -> $DEST_FILE"
+        done
+    
+    - name: Display file differences
+      run: |
+        echo "=== 文件变更摘要 ==="
+        for i in "${!TARGET_FILES[@]}"; do
+          SOURCE_FILE="${TARGET_FILES[$i]}"
+          DEST_FILE="${COPY_DESTINATIONS[$i]}"
+          
+          if [ -f "$SOURCE_FILE" ] && [ -f "$DEST_FILE" ]; then
+            echo "比较 $SOURCE_FILE 和 $DEST_FILE:"
+            diff -u "$SOURCE_FILE" "$DEST_FILE" || true
+            echo "----------------------------------------"
+          fi
+        done
+    
+    - name: Commit and push changes
+      run: |
+        # 配置Git用户信息
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # 添加所有更改的文件
+        git add .
+        
+        # 检查是否有更改需要提交
+        if git diff --staged --quiet; then
+          echo "没有检测到文件更改"
+        else
+          # 构建详细的提交信息
+          COMMIT_MESSAGE="Auto: Transform and copy files via GitHub Actions
+          
+# 文件转换和复制操作：
+- 源文件: ${{ github.event.inputs.target_files }}
+- 目标文件: ${{ github.event.inputs.copy_destinations }}
+
+字符替换操作："
+
+          # 添加所有字符替换步骤到提交信息
+          for group_index in "${!SEARCH_GROUPS[@]}"; do
+            SEARCH_GROUP=(${SEARCH_GROUPS[$group_index]//,/ })
+            REPLACE_GROUP=(${REPLACE_GROUPS[$group_index]//,/ })
+            
+            COMMIT_MESSAGE="$COMMIT_MESSAGE"$'\n'"- 替换组 $((group_index+1)): "
+            
+            for char_index in "${!SEARCH_GROUP[@]}"; do
+              SEARCH="${SEARCH_GROUP[$char_index]}"
+              REPLACE="${REPLACE_GROUP[$char_index]}"
+              COMMIT_MESSAGE="$COMMIT_MESSAGE"'\"'"$SEARCH"'\"'">"'\"'"$REPLACE"'\"'" "
+            done
+          done
+
+          # 提交更改
+          git commit -m "$COMMIT_MESSAGE"
+          
+          # 推送更改
+          git push
+          echo "更改已提交并推送到仓库"
+        fi
+
+    - name: Summary
+      run: |
+        echo "=== 操作完成摘要 ==="
+        echo "处理的文件对:"
+        for i in "${!TARGET_FILES[@]}"; do
+          echo "  ${TARGET_FILES[$i]} -> ${COPY_DESTINATIONS[$i]}"
+        done
+        echo ""
+        echo "执行的字符替换组:"
+        for group_index in "${!SEARCH_GROUPS[@]}"; do
+          SEARCH_GROUP=(${SEARCH_GROUPS[$group_index]//,/ })
+          REPLACE_GROUP=(${REPLACE_GROUPS[$group_index]//,/ })
+          
+          echo "  组 $((group_index+1)):"
+          for char_index in "${!SEARCH_GROUP[@]}"; do
+            echo "    '${SEARCH_GROUP[$char_index]}' -> '${REPLACE_GROUP[$char_index]}'"
+          done
+        done
