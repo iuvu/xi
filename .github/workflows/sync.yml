@@ -41,8 +41,22 @@ jobs:
         INPUT_REPLACE_CHARS: ${{ github.event.inputs.replace_chars }}
         INPUT_COPY_DESTINATIONS: ${{ github.event.inputs.copy_destinations }}
     
+    - name: Debug environment variables
+      run: |
+        echo "=== 环境变量调试 ==="
+        echo "TARGET_FILES 数量: ${#TARGET_FILES[@]}"
+        echo "TARGET_FILES 内容: ${TARGET_FILES[@]}"
+        echo "SEARCH_GROUPS 数量: ${#SEARCH_GROUPS[@]}"
+        echo "SEARCH_GROUPS 内容: ${SEARCH_GROUPS[@]}"
+        echo "REPLACE_GROUPS 数量: ${#REPLACE_GROUPS[@]}"
+        echo "REPLACE_GROUPS 内容: ${REPLACE_GROUPS[@]}"
+        echo "COPY_DESTINATIONS 数量: ${#COPY_DESTINATIONS[@]}"
+        echo "COPY_DESTINATIONS 内容: ${COPY_DESTINATIONS[@]}"
+    
     - name: Validate input lengths
       run: |
+        echo "开始输入验证..."
+        
         # 检查查找组和替换组数量是否匹配
         if [ ${#SEARCH_GROUPS[@]} -ne ${#REPLACE_GROUPS[@]} ]; then
           echo "错误：查找组数量(${#SEARCH_GROUPS[@]})与替换组数量(${#REPLACE_GROUPS[@]})不匹配"
@@ -51,11 +65,14 @@ jobs:
         
         # 检查每组内的字符数量是否匹配
         for i in "${!SEARCH_GROUPS[@]}"; do
-          SEARCH_GROUP=(${SEARCH_GROUPS[$i]//,/ })
-          REPLACE_GROUP=(${REPLACE_GROUPS[$i]//,/ })
+          # 将组字符串转换为数组
+          IFS=',' read -ra SEARCH_GROUP <<< "${SEARCH_GROUPS[$i]}"
+          IFS=',' read -ra REPLACE_GROUP <<< "${REPLACE_GROUPS[$i]}"
           
           if [ ${#SEARCH_GROUP[@]} -ne ${#REPLACE_GROUP[@]} ]; then
             echo "错误：第$((i+1))组中查找字符数量(${#SEARCH_GROUP[@]})与替换字符数量(${#REPLACE_GROUP[@]})不匹配"
+            echo "查找组: ${SEARCH_GROUP[@]}"
+            echo "替换组: ${REPLACE_GROUP[@]}"
             exit 1
           fi
         done
