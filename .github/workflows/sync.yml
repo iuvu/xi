@@ -32,8 +32,8 @@ jobs:
       run: |
         # 将输入参数转换为数组
         echo "TARGET_FILES=(${INPUT_TARGET_FILES//,/ })" >> $GITHUB_ENV
-        echo "SEARCH_GROUPS=(${INPUT_SEARCH_CHARS//;/ })" >> $GITHUB_ENV
-        echo "REPLACE_GROUPS=(${INPUT_REPLACE_CHARS//;/ })" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=(${INPUT_SEARCH_CHARS//,/ })" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=(${INPUT_REPLACE_CHARS//,/ })" >> $GITHUB_ENV
         echo "COPY_DESTINATIONS=(${INPUT_COPY_DESTINATIONS//,/ })" >> $GITHUB_ENV
       env:
         INPUT_TARGET_FILES: ${{ github.event.inputs.target_files }}
@@ -41,41 +41,15 @@ jobs:
         INPUT_REPLACE_CHARS: ${{ github.event.inputs.replace_chars }}
         INPUT_COPY_DESTINATIONS: ${{ github.event.inputs.copy_destinations }}
     
-    - name: Debug environment variables
-      run: |
-        echo "=== 环境变量调试 ==="
-        echo "TARGET_FILES 数量: ${#TARGET_FILES[@]}"
-        echo "TARGET_FILES 内容: ${TARGET_FILES[@]}"
-        echo "SEARCH_GROUPS 数量: ${#SEARCH_GROUPS[@]}"
-        echo "SEARCH_GROUPS 内容: ${SEARCH_GROUPS[@]}"
-        echo "REPLACE_GROUPS 数量: ${#REPLACE_GROUPS[@]}"
-        echo "REPLACE_GROUPS 内容: ${REPLACE_GROUPS[@]}"
-        echo "COPY_DESTINATIONS 数量: ${#COPY_DESTINATIONS[@]}"
-        echo "COPY_DESTINATIONS 内容: ${COPY_DESTINATIONS[@]}"
-    
     - name: Validate input lengths
       run: |
         echo "开始输入验证..."
         
-        # 检查查找组和替换组数量是否匹配
-        if [ ${#SEARCH_GROUPS[@]} -ne ${#REPLACE_GROUPS[@]} ]; then
-          echo "错误：查找组数量(${#SEARCH_GROUPS[@]})与替换组数量(${#REPLACE_GROUPS[@]})不匹配"
+        # 检查查找字符和替换字符数量是否匹配
+        if [ ${#SEARCH_CHARS[@]} -ne ${#REPLACE_CHARS[@]} ]; then
+          echo "错误：查找字符数量(${#SEARCH_CHARS[@]})与替换字符数量(${#REPLACE_CHARS[@]})不匹配"
           exit 1
         fi
-        
-        # 检查每组内的字符数量是否匹配
-        for i in "${!SEARCH_GROUPS[@]}"; do
-          # 将组字符串转换为数组
-          IFS=',' read -ra SEARCH_GROUP <<< "${SEARCH_GROUPS[$i]}"
-          IFS=',' read -ra REPLACE_GROUP <<< "${REPLACE_GROUPS[$i]}"
-          
-          if [ ${#SEARCH_GROUP[@]} -ne ${#REPLACE_GROUP[@]} ]; then
-            echo "错误：第$((i+1))组中查找字符数量(${#SEARCH_GROUP[@]})与替换字符数量(${#REPLACE_GROUP[@]})不匹配"
-            echo "查找组: ${SEARCH_GROUP[@]}"
-            echo "替换组: ${REPLACE_GROUP[@]}"
-            exit 1
-          fi
-        done
         
         # 检查目标文件和复制路径数量是否匹配
         if [ ${#TARGET_FILES[@]} -ne ${#COPY_DESTINATIONS[@]} ]; then
@@ -108,32 +82,24 @@ jobs:
           
           echo "=== 字符替换详情 ==="
           
-          # 遍历所有替换组
-          for group_index in "${!SEARCH_GROUPS[@]}"; do
-            SEARCH_GROUP=(${SEARCH_GROUPS[$group_index]//,/ })
-            REPLACE_GROUP=(${REPLACE_GROUPS[$group_index]//,/ })
+          # 执行一对一字符替换
+          for j in "${!SEARCH_CHARS[@]}"; do
+            SEARCH="${SEARCH_CHARS[$j]}"
+            REPLACE="${REPLACE_CHARS[$j]}"
             
-            echo "--- 替换组 $((group_index+1)) ---"
+            # 记录替换前的状态
+            OLD_CONTENT="$CONTENT"
+            CONTENT="${CONTENT//$SEARCH/$REPLACE}"
             
-            # 执行当前组的一对一字符替换
-            for char_index in "${!SEARCH_GROUP[@]}"; do
-              SEARCH="${SEARCH_GROUP[$char_index]}"
-              REPLACE="${REPLACE_GROUP[$char_index]}"
-              
-              # 记录替换前的状态
-              OLD_CONTENT="$CONTENT"
-              CONTENT="${CONTENT//$SEARCH/$REPLACE}"
-              
-              # 统计替换次数
-              OLD_COUNT=$(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l || true)
-              NEW_COUNT=$(echo "$CONTENT" | grep -o "$SEARCH" | wc -l || true)
-              REPLACED_COUNT=$((OLD_COUNT - NEW_COUNT))
-              
-              echo "替换 '$SEARCH' -> '$REPLACE': 替换了 $REPLACED_COUNT 次"
-              
-              # 修改位置标记 - 字符替换
-              echo "修改位置: 字符级别替换 - 文件 '$SOURCE_FILE' 中的字符 '$SEARCH' 替换为 '$REPLACE' (组$((group_index+1)))"
-            done
+            # 统计替换次数
+            OLD_COUNT=$(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l || true)
+            NEW_COUNT=$(echo "$CONTENT" | grep -o "$SEARCH" | wc -l || true)
+            REPLACED_COUNT=$((OLD_COUNT - NEW_COUNT))
+            
+            echo "替换 '$SEARCH' -> '$REPLACE': 替换了 $REPLACED_COUNT 次"
+            
+            # 修改位置标记 - 字符替换
+            echo "修改位置: 字符级别替换 - 文件 '$SOURCE_FILE' 中的字符 '$SEARCH' 替换为 '$REPLACE'"
           done
           
           # 检查内容是否有变化
@@ -197,14 +163,7 @@ jobs:
           echo "  ${TARGET_FILES[$i]} -> ${COPY_DESTINATIONS[$i]}"
         done
         echo ""
-        echo "执行的字符替换组:"
-        for group_index in "${!SEARCH_GROUPS[@]}"; do
-          SEARCH_GROUP=(${SEARCH_GROUPS[$group_index]//,/ })
-          REPLACE_GROUP=(${REPLACE_GROUPS[$group_index]//,/ })
-          
-          echo "  组 $((group_index+1)):"
-          for char_index in "${!SEARCH_GROUP[@]}"; do
-            echo "    '${SEARCH_GROUP[$char_index]}' -> '${REPLACE_GROUP[$char_index]}'"
-          done
-        done
+        echo "执行的字符替换:"
+        for j in "${!SEARCH_CHARS[@]}"; do
+          echo "  '${SEARCH_CHARS[$j]}' -> '${REPLACE_CHARS[$j]}'"
         done
