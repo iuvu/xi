@@ -20,6 +20,11 @@ on:
         required: true
         default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml'
         
+  # 自动触发：当指定目录下的文件被修改时
+  push:
+    paths:
+      - 'Rules/list/*.list'
+
 jobs:
   transform-and-copy:
     runs-on: ubuntu-latest
@@ -28,18 +33,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       
-    - name: Set up environment
+    - name: Set parameters based on trigger type
       run: |
-        # 将输入参数转换为数组
-        echo "TARGET_FILES=(${INPUT_TARGET_FILES//,/ })" >> $GITHUB_ENV
-        echo "SEARCH_CHARS=(${INPUT_SEARCH_CHARS//,/ })" >> $GITHUB_ENV
-        echo "REPLACE_CHARS=(${INPUT_REPLACE_CHARS//,/ })" >> $GITHUB_ENV
-        echo "COPY_DESTINATIONS=(${INPUT_COPY_DESTINATIONS//,/ })" >> $GITHUB_ENV
-      env:
-        INPUT_TARGET_FILES: ${{ github.event.inputs.target_files }}
-        INPUT_SEARCH_CHARS: ${{ github.event.inputs.search_chars }}
-        INPUT_REPLACE_CHARS: ${{ github.event.inputs.replace_chars }}
-        INPUT_COPY_DESTINATIONS: ${{ github.event.inputs.copy_destinations }}
+        # 如果是手动触发，使用输入参数
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "手动触发模式"
+          echo "TARGET_FILES=(${{ github.event.inputs.target_files//,/ }})" >> $GITHUB_ENV
+          echo "SEARCH_CHARS=(${{ github.event.inputs.search_chars//,/ }})" >> $GITHUB_ENV
+          echo "REPLACE_CHARS=(${{ github.event.inputs.replace_chars//,/ }})" >> $GITHUB_ENV
+          echo "COPY_DESTINATIONS=(${{ github.event.inputs.copy_destinations//,/ }})" >> $GITHUB_ENV
+        else
+          # 如果是自动触发，使用固定参数
+          echo "自动触发模式"
+          echo "TARGET_FILES=(Rules/list/Game/Sky.list Rules/list/Game/SkyCN.list Rules/list/Emby.list Rules/list/live_television.list)" >> $GITHUB_ENV
+          echo "SEARCH_CHARS=(DOMAIN DOMAIN-SUFFIX DOMAIN-KEYWORD IP-CIDR IP-CIDR6)" >> $GITHUB_ENV
+          echo "REPLACE_CHARS=(- DOMAIN - DOMAIN-SUFFIX - DOMAIN-KEYWORD - IP-CIDR - IP-CIDR6)" >> $GITHUB_ENV
+          echo "COPY_DESTINATIONS=(Rules/yaml/Game/Sky.yaml Rules/yaml/Game/SkyCN.yaml Rules/yaml/Emby.yaml Rules/yaml/live_television.yaml)" >> $GITHUB_ENV
+        fi
+        
+        echo "触发类型: ${{ github.event_name }}"
+        echo "目标文件: ${TARGET_FILES[@]}"
     
     - name: Validate input lengths
       run: |
@@ -144,8 +157,12 @@ jobs:
         if git diff --staged --quiet; then
           echo "没有检测到文件更改"
         else
-          # 使用简单的提交信息避免语法问题
-          COMMIT_MSG="Auto: Transform files - ${{ github.event.inputs.target_files }}"
+          # 根据触发类型生成不同的提交信息
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            COMMIT_MSG="Manual: Transform files via GitHub Actions - ${{ github.event.inputs.target_files }}"
+          else
+            COMMIT_MSG="Auto: Transform files via GitHub Actions - ${TARGET_FILES[*]}"
+          fi
           
           # 提交更改
           git commit -m "$COMMIT_MSG"
@@ -158,6 +175,7 @@ jobs:
     - name: Summary
       run: |
         echo "=== 操作完成摘要 ==="
+        echo "触发类型: ${{ github.event_name }}"
         echo "处理的文件对:"
         for i in "${!TARGET_FILES[@]}"; do
           echo "  ${TARGET_FILES[$i]} -> ${COPY_DESTINATIONS[$i]}"
