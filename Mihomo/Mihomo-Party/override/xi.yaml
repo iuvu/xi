@@ -39,13 +39,6 @@ proxy-groups:
       - Yily
 
 rule-providers:
-  reject:
-    type: http
-    behavior: domain
-    url: "https://github.com/privacy-protection-tools/anti-AD/raw/refs/heads/master/anti-ad-clash.yaml"
-    interval: 86400
-    path: ./ruleset/anti-ad-clash.yaml
-
   Bilibili:
     type: http
     behavior: classical
@@ -84,7 +77,7 @@ rule-providers:
   Emby:
     type: http
     behavior: classical
-    url: "https://github.com/xiikiss/xi/raw/release/Rules/yaml/Emby.yaml"
+    url: "https://github.com/xiikiss/xi/raw/main/Rules/yaml/Emby.yaml"
     interval: 86400
     path: ./ruleset/Emby.yaml
 
@@ -131,7 +124,6 @@ rule-providers:
     path: ./ruleset/lancidr.yaml
 
 rules:
-  - RULE-SET,reject,REJECT
   - RULE-SET,Bilibili,Bilibili
   - RULE-SET,Microsoft,DIRECT
   - RULE-SET,Copilot,Yily
