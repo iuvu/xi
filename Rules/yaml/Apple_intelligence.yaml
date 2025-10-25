@@ -1,6 +1,0 @@
-# Apple intelligence
-
-# ------
-payload:
- - DOMAIN-SUFFIX,apple-relay.apple.com
- - DOMAIN-SUFFIX,apple-relay.cloudflare.com
