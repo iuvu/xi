@@ -26,184 +26,152 @@ on:
       - 'Rules/list/**'
 
 jobs:
-  transform-and-copy:
+  sync-rules:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
-    - name: Set parameters based on trigger type
-      run: |
-        # 如果是手动触发，使用输入参数
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "手动触发模式"
-          echo "MANUAL_TARGET_FILES=${{ github.event.inputs.target_files }}" >> $GITHUB_ENV
-          echo "MANUAL_SEARCH_CHARS=${{ github.event.inputs.search_chars }}" >> $GITHUB_ENV
-          echo "MANUAL_REPLACE_CHARS=${{ github.event.inputs.replace_chars }}" >> $GITHUB_ENV
-          echo "MANUAL_COPY_DESTINATIONS=${{ github.event.inputs.copy_destinations }}" >> $GITHUB_ENV
-        else
-          # 如果是自动触发，使用固定参数
-          echo "自动触发模式"
-          echo "AUTO_MODE=true" >> $GITHUB_ENV
-        fi
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         
-        echo "触发类型: ${{ github.event_name }}"
-    
-    - name: Process manual inputs
+    - name: Setup manual parameters
       if: github.event_name == 'workflow_dispatch'
       run: |
-        # 处理手动输入的参数
-        echo "TARGET_FILES=(${MANUAL_TARGET_FILES//,/ })" >> $GITHUB_ENV
-        echo "SEARCH_CHARS=(${MANUAL_SEARCH_CHARS//,/ })" >> $GITHUB_ENV
-        echo "REPLACE_CHARS=(${MANUAL_REPLACE_CHARS//,/ })" >> $GITHUB_ENV
-        echo "COPY_DESTINATIONS=(${MANUAL_COPY_DESTINATIONS//,/ })" >> $GITHUB_ENV
+        echo "TARGET_FILES=${{ github.event.inputs.target_files }}" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=${{ github.event.inputs.search_chars }}" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=${{ github.event.inputs.replace_chars }}" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=${{ github.event.inputs.copy_destinations }}" >> $GITHUB_ENV
         
-        echo "目标文件: ${MANUAL_TARGET_FILES//,/ }"
-    
-    - name: Process auto inputs
+    - name: Setup auto parameters
       if: github.event_name != 'workflow_dispatch'
       run: |
-        # 设置自动触发的固定参数
-        echo "TARGET_FILES=(Rules/list/Game/Sky.list Rules/list/Game/SkyCN.list Rules/list/Emby.list Rules/list/live_television.list)" >> $GITHUB_ENV
-        echo "SEARCH_CHARS=(DOMAIN DOMAIN-SUFFIX DOMAIN-KEYWORD IP-CIDR IP-CIDR6)" >> $GITHUB_ENV
-        echo "REPLACE_CHARS=(- DOMAIN - DOMAIN-SUFFIX - DOMAIN-KEYWORD - IP-CIDR - IP-CIDR6)" >> $GITHUB_ENV
-        echo "COPY_DESTINATIONS=(Rules/yaml/Game/Sky.yaml Rules/yaml/Game/SkyCN.yaml Rules/yaml/Emby.yaml Rules/yaml/live_television.yaml)" >> $GITHUB_ENV
+        echo "TARGET_FILES=Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=DOMAIN,DOMAIN-SUFFIX,DOMAIN-KEYWORD,IP-CIDR,IP-CIDR6" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=- DOMAIN,- DOMAIN-SUFFIX,- DOMAIN-KEYWORD,- IP-CIDR,- IP-CIDR6" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml" >> $GITHUB_ENV
         
-        echo "目标文件: Rules/list/Game/Sky.list Rules/list/Game/SkyCN.list Rules/list/Emby.list Rules/list/live_television.list"
-    
-    - name: Validate input lengths
+    - name: Process files
       run: |
-        echo "开始输入验证..."
-        echo "目标文件: ${TARGET_FILES[@]}"
-        echo "查找字符: ${SEARCH_CHARS[@]}"
-        echo "替换字符: ${REPLACE_CHARS[@]}"
-        echo "复制路径: ${COPY_DESTINATIONS[@]}"
+        # Convert comma-separated strings to arrays
+        IFS=',' read -ra TARGET_FILES_ARRAY <<< "$TARGET_FILES"
+        IFS=',' read -ra SEARCH_CHARS_ARRAY <<< "$SEARCH_CHARS"
+        IFS=',' read -ra REPLACE_CHARS_ARRAY <<< "$REPLACE_CHARS"
+        IFS=',' read -ra COPY_DESTINATIONS_ARRAY <<< "$COPY_DESTINATIONS"
         
-        # 检查查找字符和替换字符数量是否匹配
-        if [ ${#SEARCH_CHARS[@]} -ne ${#REPLACE_CHARS[@]} ]; then
-          echo "错误：查找字符数量(${#SEARCH_CHARS[@]})与替换字符数量(${#REPLACE_CHARS[@]})不匹配"
+        echo "Target files: ${TARGET_FILES_ARRAY[@]}"
+        echo "Search chars: ${SEARCH_CHARS_ARRAY[@]}"
+        echo "Replace chars: ${REPLACE_CHARS_ARRAY[@]}"
+        echo "Copy destinations: ${COPY_DESTINATIONS_ARRAY[@]}"
+        
+        # Validate input lengths
+        if [ ${#SEARCH_CHARS_ARRAY[@]} -ne ${#REPLACE_CHARS_ARRAY[@]} ]; then
+          echo "Error: Search characters count (${#SEARCH_CHARS_ARRAY[@]}) does not match replace characters count (${#REPLACE_CHARS_ARRAY[@]})"
           exit 1
         fi
         
-        # 检查目标文件和复制路径数量是否匹配
-        if [ ${#TARGET_FILES[@]} -ne ${#COPY_DESTINATIONS[@]} ]; then
-          echo "错误：目标文件数量(${#TARGET_FILES[@]})与复制路径数量(${#COPY_DESTINATIONS[@]})不匹配"
+        if [ ${#TARGET_FILES_ARRAY[@]} -ne ${#COPY_DESTINATIONS_ARRAY[@]} ]; then
+          echo "Error: Target files count (${#TARGET_FILES_ARRAY[@]}) does not match copy destinations count (${#COPY_DESTINATIONS_ARRAY[@]})"
           exit 1
         fi
-        echo "输入验证通过"
-    
-    - name: Transform and copy files
-      run: |
-        # 遍历所有目标文件
-        for i in "${!TARGET_FILES[@]}"; do
-          SOURCE_FILE="${TARGET_FILES[$i]}"
-          DEST_FILE="${COPY_DESTINATIONS[$i]}"
+        
+        # Process each file
+        for i in "${!TARGET_FILES_ARRAY[@]}"; do
+          SOURCE_FILE="${TARGET_FILES_ARRAY[$i]}"
+          DEST_FILE="${COPY_DESTINATIONS_ARRAY[$i]}"
           
-          echo "正在处理文件: $SOURCE_FILE -> $DEST_FILE"
+          echo "Processing: $SOURCE_FILE -> $DEST_FILE"
           
-          # 检查源文件是否存在
+          # Check if source file exists
           if [ ! -f "$SOURCE_FILE" ]; then
-            echo "警告：源文件 $SOURCE_FILE 不存在，跳过"
+            echo "Warning: Source file $SOURCE_FILE does not exist, skipping"
             continue
           fi
           
-          # 创建目标目录（如果不存在）
+          # Create destination directory
           mkdir -p "$(dirname "$DEST_FILE")"
           
-          # 读取源文件内容
+          # Read source file content
           CONTENT=$(cat "$SOURCE_FILE")
           ORIGINAL_CONTENT="$CONTENT"
           
-          echo "=== 字符替换详情 ==="
+          echo "=== Character Replacement Details ==="
           
-          # 执行一对一字符替换
-          for j in "${!SEARCH_CHARS[@]}"; do
-            SEARCH="${SEARCH_CHARS[$j]}"
-            REPLACE="${REPLACE_CHARS[$j]}"
+          # Perform character replacements
+          for j in "${!SEARCH_CHARS_ARRAY[@]}"; do
+            SEARCH="${SEARCH_CHARS_ARRAY[$j]}"
+            REPLACE="${REPLACE_CHARS_ARRAY[$j]}"
             
-            # 记录替换前的状态
             OLD_CONTENT="$CONTENT"
             CONTENT="${CONTENT//$SEARCH/$REPLACE}"
             
-            # 统计替换次数
             OLD_COUNT=$(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l || true)
             NEW_COUNT=$(echo "$CONTENT" | grep -o "$SEARCH" | wc -l || true)
             REPLACED_COUNT=$((OLD_COUNT - NEW_COUNT))
             
-            echo "替换 '$SEARCH' -> '$REPLACE': 替换了 $REPLACED_COUNT 次"
-            
-            # 修改位置标记 - 字符替换
-            echo "修改位置: 字符级别替换 - 文件 '$SOURCE_FILE' 中的字符 '$SEARCH' 替换为 '$REPLACE'"
+            echo "Replaced '$SEARCH' with '$REPLACE': $REPLACED_COUNT times"
+            echo "Modification location: Character replacement in '$SOURCE_FILE' - '$SEARCH' to '$REPLACE'"
           done
           
-          # 检查内容是否有变化
-          if [ "$ORIGINAL_CONTENT" == "$CONTENT" ]; then
-            echo "文件内容未发生变化"
-          else
-            echo "文件内容已更新"
-          fi
-          
-          # 将转换后的内容写入目标文件
+          # Write transformed content to destination file
           echo "$CONTENT" > "$DEST_FILE"
-          echo "文件已复制到: $DEST_FILE"
-          
-          # 复制文件路径标记
-          echo "复制文件路径: $SOURCE_FILE -> $DEST_FILE"
+          echo "File copied to: $DEST_FILE"
+          echo "Copy file path: $SOURCE_FILE -> $DEST_FILE"
         done
-    
-    - name: Display file differences
+        
+    - name: Display differences
       run: |
-        echo "=== 文件变更摘要 ==="
-        for i in "${!TARGET_FILES[@]}"; do
-          SOURCE_FILE="${TARGET_FILES[$i]}"
-          DEST_FILE="${COPY_DESTINATIONS[$i]}"
+        IFS=',' read -ra TARGET_FILES_ARRAY <<< "$TARGET_FILES"
+        IFS=',' read -ra COPY_DESTINATIONS_ARRAY <<< "$COPY_DESTINATIONS"
+        
+        echo "=== File Changes Summary ==="
+        for i in "${!TARGET_FILES_ARRAY[@]}"; do
+          SOURCE_FILE="${TARGET_FILES_ARRAY[$i]}"
+          DEST_FILE="${COPY_DESTINATIONS_ARRAY[$i]}"
           
           if [ -f "$SOURCE_FILE" ] && [ -f "$DEST_FILE" ]; then
-            echo "比较 $SOURCE_FILE 和 $DEST_FILE:"
+            echo "Comparing $SOURCE_FILE and $DEST_FILE:"
             diff -u "$SOURCE_FILE" "$DEST_FILE" || true
             echo "----------------------------------------"
           fi
         done
-    
-    - name: Commit and push changes
+        
+    - name: Commit changes
       run: |
-        # 配置Git用户信息
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 添加所有更改的文件
         git add .
         
-        # 检查是否有更改需要提交
         if git diff --staged --quiet; then
-          echo "没有检测到文件更改"
+          echo "No changes detected"
         else
-          # 根据触发类型生成不同的提交信息
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            COMMIT_MSG="Manual: Transform files via GitHub Actions - ${{ github.event.inputs.target_files }}"
+            COMMIT_MSG="Manual: Sync rules - ${{ github.event.inputs.target_files }}"
           else
-            COMMIT_MSG="Auto: Transform files via GitHub Actions - ${TARGET_FILES[*]}"
+            COMMIT_MSG="Auto: Sync rules - $TARGET_FILES"
           fi
           
-          # 提交更改
           git commit -m "$COMMIT_MSG"
-          
-          # 推送更改
           git push
-          echo "更改已提交并推送到仓库"
+          echo "Changes committed and pushed"
         fi
-
+        
     - name: Summary
       run: |
-        echo "=== 操作完成摘要 ==="
-        echo "触发类型: ${{ github.event_name }}"
-        echo "处理的文件对:"
-        for i in "${!TARGET_FILES[@]}"; do
-          echo "  ${TARGET_FILES[$i]} -> ${COPY_DESTINATIONS[$i]}"
+        IFS=',' read -ra TARGET_FILES_ARRAY <<< "$TARGET_FILES"
+        IFS=',' read -ra SEARCH_CHARS_ARRAY <<< "$SEARCH_CHARS"
+        IFS=',' read -ra REPLACE_CHARS_ARRAY <<< "$REPLACE_CHARS"
+        IFS=',' read -ra COPY_DESTINATIONS_ARRAY <<< "$COPY_DESTINATIONS"
+        
+        echo "=== Operation Summary ==="
+        echo "Trigger type: ${{ github.event_name }}"
+        echo "File pairs processed:"
+        for i in "${!TARGET_FILES_ARRAY[@]}"; do
+          echo "  ${TARGET_FILES_ARRAY[$i]} -> ${COPY_DESTINATIONS_ARRAY[$i]}"
         done
         echo ""
-        echo "执行的字符替换:"
-        for j in "${!SEARCH_CHARS[@]}"; do
-          echo "  '${SEARCH_CHARS[$j]}' -> '${REPLACE_CHARS[$j]}'"
+        echo "Character replacements:"
+        for j in "${!SEARCH_CHARS_ARRAY[@]}"; do
+          echo "  '${SEARCH_CHARS_ARRAY[$j]}' -> '${REPLACE_CHARS_ARRAY[$j]}'"
         done
