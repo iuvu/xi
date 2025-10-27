@@ -4,23 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       target_files:
-        description: '要处理的文件路径（多个文件用逗号分隔）'
+        description: 'Source file paths (comma separated)'
         required: true
         default: 'Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list'
       search_chars:
-        description: '要查找的字符（多个字符用逗号分隔，支持多组替换用分号分隔）'
+        description: 'Characters to search for (comma separated)'
         required: true
         default: 'DOMAIN,,DOMAIN-SUFFIX,,DOMAIN-KEYWORD,,IP-CIDR,,IP-CIDR6,'
       replace_chars:
-        description: '替换的字符（与查找字符一一对应，多组替换用分号分隔）'
+        description: 'Characters to replace with (comma separated)'
         required: true
         default: ' - DOMAIN,, - DOMAIN-SUFFIX,, - DOMAIN-KEYWORD,, - IP-CIDR,, - IP-CIDR6,'
       copy_destinations:
-        description: '复制目标路径（多个路径用逗号分隔）'
+        description: 'Destination file paths (comma separated)'
         required: true
         default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml'
-        
-  # 自动触发：当指定目录下的文件被修改时
+
   push:
     paths:
       - 'Rules/list/**'
