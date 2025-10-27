@@ -38,25 +38,47 @@ jobs:
         # 如果是手动触发，使用输入参数
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           echo "手动触发模式"
-          echo "TARGET_FILES=(${{ github.event.inputs.target_files//,/ }})" >> $GITHUB_ENV
-          echo "SEARCH_CHARS=(${{ github.event.inputs.search_chars//,/ }})" >> $GITHUB_ENV
-          echo "REPLACE_CHARS=(${{ github.event.inputs.replace_chars//,/ }})" >> $GITHUB_ENV
-          echo "COPY_DESTINATIONS=(${{ github.event.inputs.copy_destinations//,/ }})" >> $GITHUB_ENV
+          echo "MANUAL_TARGET_FILES=${{ github.event.inputs.target_files }}" >> $GITHUB_ENV
+          echo "MANUAL_SEARCH_CHARS=${{ github.event.inputs.search_chars }}" >> $GITHUB_ENV
+          echo "MANUAL_REPLACE_CHARS=${{ github.event.inputs.replace_chars }}" >> $GITHUB_ENV
+          echo "MANUAL_COPY_DESTINATIONS=${{ github.event.inputs.copy_destinations }}" >> $GITHUB_ENV
         else
           # 如果是自动触发，使用固定参数
           echo "自动触发模式"
-          echo "TARGET_FILES=(Rules/list/Game/Sky.list Rules/list/Game/SkyCN.list Rules/list/Emby.list Rules/list/live_television.list)" >> $GITHUB_ENV
-          echo "SEARCH_CHARS=(DOMAIN DOMAIN-SUFFIX DOMAIN-KEYWORD IP-CIDR IP-CIDR6)" >> $GITHUB_ENV
-          echo "REPLACE_CHARS=(- DOMAIN - DOMAIN-SUFFIX - DOMAIN-KEYWORD - IP-CIDR - IP-CIDR6)" >> $GITHUB_ENV
-          echo "COPY_DESTINATIONS=(Rules/yaml/Game/Sky.yaml Rules/yaml/Game/SkyCN.yaml Rules/yaml/Emby.yaml Rules/yaml/live_television.yaml)" >> $GITHUB_ENV
+          echo "AUTO_MODE=true" >> $GITHUB_ENV
         fi
         
         echo "触发类型: ${{ github.event_name }}"
-        echo "目标文件: ${TARGET_FILES[@]}"
+    
+    - name: Process manual inputs
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        # 处理手动输入的参数
+        echo "TARGET_FILES=(${MANUAL_TARGET_FILES//,/ })" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=(${MANUAL_SEARCH_CHARS//,/ })" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=(${MANUAL_REPLACE_CHARS//,/ })" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=(${MANUAL_COPY_DESTINATIONS//,/ })" >> $GITHUB_ENV
+        
+        echo "目标文件: ${MANUAL_TARGET_FILES//,/ }"
+    
+    - name: Process auto inputs
+      if: github.event_name != 'workflow_dispatch'
+      run: |
+        # 设置自动触发的固定参数
+        echo "TARGET_FILES=(Rules/list/Game/Sky.list Rules/list/Game/SkyCN.list Rules/list/Emby.list Rules/list/live_television.list)" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=(DOMAIN DOMAIN-SUFFIX DOMAIN-KEYWORD IP-CIDR IP-CIDR6)" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=(- DOMAIN - DOMAIN-SUFFIX - DOMAIN-KEYWORD - IP-CIDR - IP-CIDR6)" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=(Rules/yaml/Game/Sky.yaml Rules/yaml/Game/SkyCN.yaml Rules/yaml/Emby.yaml Rules/yaml/live_television.yaml)" >> $GITHUB_ENV
+        
+        echo "目标文件: Rules/list/Game/Sky.list Rules/list/Game/SkyCN.list Rules/list/Emby.list Rules/list/live_television.list"
     
     - name: Validate input lengths
       run: |
         echo "开始输入验证..."
+        echo "目标文件: ${TARGET_FILES[@]}"
+        echo "查找字符: ${SEARCH_CHARS[@]}"
+        echo "替换字符: ${REPLACE_CHARS[@]}"
+        echo "复制路径: ${COPY_DESTINATIONS[@]}"
         
         # 检查查找字符和替换字符数量是否匹配
         if [ ${#SEARCH_CHARS[@]} -ne ${#REPLACE_CHARS[@]} ]; then
