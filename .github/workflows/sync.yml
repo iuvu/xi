@@ -23,7 +23,7 @@ on:
   # 自动触发：当指定目录下的文件被修改时
   push:
     paths:
-      - 'Rules/list/*.list'
+      - 'Rules/list/**'
 
 jobs:
   transform-and-copy:
