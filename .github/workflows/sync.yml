@@ -28,31 +28,69 @@ on:
 jobs:
   sync-rules:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
-    - name: Debug info
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: release  # 明确指定分支
+
+    - name: Setup parameters for manual trigger
+      if: github.event_name == 'workflow_dispatch'
       run: |
-        echo "Event name: ${{ github.event_name }}"
-        echo "Ref: ${{ github.ref }}"
-        echo "SHA: ${{ github.sha }}"
-        
-    - name: Process files
-      env:
-        TARGET_FILES: ${{ github.event.inputs.target_files || 'Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list' }}
-        SEARCH_CHARS: ${{ github.event.inputs.search_chars || 'DOMAIN,,DOMAIN-SUFFIX,,DOMAIN-KEYWORD,,IP-CIDR,,IP-CIDR6,' }}
-        REPLACE_CHARS: ${{ github.event.inputs.replace_chars || ' - DOMAIN,, - DOMAIN-SUFFIX,, - DOMAIN-KEYWORD,, - IP-CIDR,, - IP-CIDR6,' }}
-        COPY_DESTINATIONS: ${{ github.event.inputs.copy_destinations || 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml' }}
+        echo "TARGET_FILES=${{ github.event.inputs.target_files }}" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=${{ github.event.inputs.search_chars }}" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=${{ github.event.inputs.replace_chars }}" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=${{ github.event.inputs.copy_destinations }}" >> $GITHUB_ENV
+
+    - name: Setup parameters for auto trigger
+      if: github.event_name != 'workflow_dispatch'
       run: |
-        echo "=== Starting file processing ==="
-        echo "Target files: $TARGET_FILES"
-        echo "Search chars: $SEARCH_CHARS"
-        echo "Replace chars: $REPLACE_CHARS"
-        echo "Copy destinations: $COPY_DESTINATIONS"
+        echo "TARGET_FILES=Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=DOMAIN,DOMAIN-SUFFIX,DOMAIN-KEYWORD,IP-CIDR,IP-CIDR6" >> $GITHUB_ENV
+        echo "REPLACE_CHARS=- DOMAIN,- DOMAIN-SUFFIX,- DOMAIN-KEYWORD,- IP-CIDR,- IP-CIDR6" >> $GITHUB_ENV
+        echo "COPY_DESTINATIONS=Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml" >> $GITHUB_ENV
+
+    - name: Show debug information
+      run: |
+        echo "=== Debug Information ==="
+        echo "Event: ${{ github.event_name }}"
+        echo "Branch: ${{ github.ref }}"
+        echo "Target Files: $TARGET_FILES"
+        echo "Search Chars: $SEARCH_CHARS"
+        echo "Replace Chars: $REPLACE_CHARS"
+        echo "Copy Destinations: $COPY_DESTINATIONS"
+        echo "Current directory: $(pwd)"
+        echo "Files in Rules/list:"
+        ls -la Rules/list/ || echo "Rules/list directory not found"
+        echo "=== End Debug ==="
+
+    - name: Validate inputs
+      run: |
+        echo "=== Validating Inputs ==="
+        # Check if required environment variables are set
+        if [ -z "$TARGET_FILES" ]; then
+          echo "❌ ERROR: TARGET_FILES is not set"
+          exit 1
+        fi
+        if [ -z "$SEARCH_CHARS" ]; then
+          echo "❌ ERROR: SEARCH_CHARS is not set"
+          exit 1
+        fi
+        if [ -z "$REPLACE_CHARS" ]; then
+          echo "❌ ERROR: REPLACE_CHARS is not set"
+          exit 1
+        fi
+        if [ -z "$COPY_DESTINATIONS" ]; then
+          echo "❌ ERROR: COPY_DESTINATIONS is not set"
+          exit 1
+        fi
+        echo "✅ All environment variables are set"
+
+    - name: Process file transformations
+      run: |
+        echo "=== Starting File Processing ==="
         
         # Convert comma-separated strings to arrays
         IFS=',' read -ra TARGET_ARRAY <<< "$TARGET_FILES"
@@ -60,91 +98,132 @@ jobs:
         IFS=',' read -ra REPLACE_ARRAY <<< "$REPLACE_CHARS"
         IFS=',' read -ra DEST_ARRAY <<< "$COPY_DESTINATIONS"
         
-        # Validate arrays
+        echo "Target files count: ${#TARGET_ARRAY[@]}"
+        echo "Search chars count: ${#SEARCH_ARRAY[@]}"
+        echo "Replace chars count: ${#REPLACE_ARRAY[@]}"
+        echo "Destination files count: ${#DEST_ARRAY[@]}"
+        
+        # Validate array lengths
         if [ ${#SEARCH_ARRAY[@]} -ne ${#REPLACE_ARRAY[@]} ]; then
-          echo "❌ Error: Search and replace arrays have different lengths"
+          echo "❌ ERROR: Search characters count (${#SEARCH_ARRAY[@]}) does not match replace characters count (${#REPLACE_ARRAY[@]})"
           exit 1
         fi
         
         if [ ${#TARGET_ARRAY[@]} -ne ${#DEST_ARRAY[@]} ]; then
-          echo "❌ Error: Target and destination arrays have different lengths"
+          echo "❌ ERROR: Target files count (${#TARGET_ARRAY[@]}) does not match destination files count (${#DEST_ARRAY[@]})"
           exit 1
         fi
         
-        # Process each file pair
+        echo "✅ Input validation passed"
+        
+        # Process each file
         for i in "${!TARGET_ARRAY[@]}"; do
           SOURCE_FILE="${TARGET_ARRAY[i]}"
           DEST_FILE="${DEST_ARRAY[i]}"
           
           echo "--- Processing: $SOURCE_FILE -> $DEST_FILE ---"
           
-          # Check if source exists
+          # Check if source file exists
           if [ ! -f "$SOURCE_FILE" ]; then
-            echo "⚠️  Warning: Source file '$SOURCE_FILE' not found, skipping"
+            echo "⚠️ WARNING: Source file '$SOURCE_FILE' does not exist, skipping"
             continue
           fi
           
-          # Create destination directory
-          mkdir -p "$(dirname "$DEST_FILE")"
+          # Create destination directory if it doesn't exist
+          DEST_DIR=$(dirname "$DEST_FILE")
+          mkdir -p "$DEST_DIR"
+          echo "Created directory: $DEST_DIR"
           
-          # Read source content
+          # Read source file content
           CONTENT=$(cat "$SOURCE_FILE")
-          echo "Original file size: ${#CONTENT} characters"
+          ORIGINAL_CONTENT="$CONTENT"
           
-          # Apply replacements
+          echo "Original file size: ${#CONTENT} characters"
+          echo "Performing character replacements..."
+          
+          # Perform character replacements
           for j in "${!SEARCH_ARRAY[@]}"; do
             SEARCH="${SEARCH_ARRAY[j]}"
             REPLACE="${REPLACE_ARRAY[j]}"
             
-            OLD_CONTENT="$CONTENT"
+            # Count occurrences before replacement
+            OLD_COUNT=$(grep -o "$SEARCH" <<< "$CONTENT" | wc -l || true)
+            
+            # Perform replacement
             CONTENT="${CONTENT//$SEARCH/$REPLACE}"
             
-            CHANGES=$(($(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l) - $(echo "$CONTENT" | grep -o "$SEARCH" | wc -l)))
-            echo "Replaced '$SEARCH' with '$REPLACE': $CHANGES changes"
+            # Count occurrences after replacement
+            NEW_COUNT=$(grep -o "$SEARCH" <<< "$CONTENT" | wc -l || true)
+            REPLACED_COUNT=$((OLD_COUNT - NEW_COUNT))
+            
+            echo "  Replaced '$SEARCH' -> '$REPLACE': $REPLACED_COUNT times"
           done
           
-          # Write to destination
+          # Write transformed content to destination file
           echo "$CONTENT" > "$DEST_FILE"
-          echo "✅ Saved to: $DEST_FILE"
+          echo "✅ Successfully created: $DEST_FILE"
+          
+          # Show file sizes for comparison
+          ORIGINAL_SIZE=$(stat -f%z "$SOURCE_FILE" 2>/dev/null || stat -c%s "$SOURCE_FILE" 2>/dev/null || echo "unknown")
+          NEW_SIZE=$(stat -f%z "$DEST_FILE" 2>/dev/null || stat -c%s "$DEST_FILE" 2>/dev/null || echo "unknown")
+          echo "File sizes - Original: $ORIGINAL_SIZE bytes, New: $NEW_SIZE bytes"
         done
         
         echo "=== File processing completed ==="
-        
-    - name: Commit and push changes
-      if: always()
+
+    - name: Show file differences
       run: |
-        echo "=== Checking for changes ==="
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        echo "=== File Differences ==="
+        IFS=',' read -ra TARGET_ARRAY <<< "$TARGET_FILES"
+        IFS=',' read -ra DEST_ARRAY <<< "$COPY_DESTINATIONS"
         
-        # Check if there are any changes
+        for i in "${!TARGET_ARRAY[@]}"; do
+          SOURCE_FILE="${TARGET_ARRAY[i]}"
+          DEST_FILE="${DEST_ARRAY[i]}"
+          
+          if [ -f "$SOURCE_FILE" ] && [ -f "$DEST_FILE" ]; then
+            echo "--- Comparing $SOURCE_FILE and $DEST_FILE ---"
+            diff -u "$SOURCE_FILE" "$DEST_FILE" | head -20 || echo "No differences or error in diff"
+            echo "----------------------------------------"
+          else
+            echo "⚠️ Cannot compare: $SOURCE_FILE or $DEST_FILE not found"
+          fi
+        done
+
+    - name: Commit and push changes
+      run: |
+        echo "=== Committing Changes ==="
+        
+        # Configure git
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        # Check for changes
         if git diff --quiet && git diff --staged --quiet; then
           echo "✅ No changes to commit"
           exit 0
         fi
         
-        echo "📝 Changes detected, committing..."
-        
         # Add all changes
         git add .
         
-        # Create commit message
+        # Create commit message based on trigger type
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          COMMIT_MSG="🔧 Manual sync: ${{ github.event.inputs.target_files || 'Rules update' }}"
+          COMMIT_MSG="🔧 Manual: Sync rules - ${{ github.event.inputs.target_files }}"
         else
-          COMMIT_MSG="🤖 Auto sync: Rules update"
+          COMMIT_MSG="🤖 Auto: Sync rules update"
         fi
         
         # Commit and push
         git commit -m "$COMMIT_MSG"
-        git push
-        echo "✅ Changes committed and pushed"
-        
+        git push origin release
+        echo "✅ Changes committed and pushed to release branch"
+
     - name: Final summary
-      if: always()
       run: |
         echo "=== Workflow Summary ==="
-        echo "✅ Workflow completed successfully"
-        echo "Event: ${{ github.event_name }}"
-        echo "Branch: ${{ github.ref }}"
-        date
+        echo "🎉 Workflow completed successfully!"
+        echo "📅 Completed at: $(date)"
+        echo "⚡ Trigger: ${{ github.event_name }}"
+        echo "🌿 Branch: release"
+        echo "✅ All file transformations completed"
