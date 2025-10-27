@@ -28,150 +28,123 @@ on:
 jobs:
   sync-rules:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.TOKEN }}
-        
-    - name: Setup manual parameters
-      if: github.event_name == 'workflow_dispatch'
+      
+    - name: Debug info
       run: |
-        echo "TARGET_FILES=${{ github.event.inputs.target_files }}" >> $GITHUB_ENV
-        echo "SEARCH_CHARS=${{ github.event.inputs.search_chars }}" >> $GITHUB_ENV
-        echo "REPLACE_CHARS=${{ github.event.inputs.replace_chars }}" >> $GITHUB_ENV
-        echo "COPY_DESTINATIONS=${{ github.event.inputs.copy_destinations }}" >> $GITHUB_ENV
-        
-    - name: Setup auto parameters
-      if: github.event_name != 'workflow_dispatch'
-      run: |
-        echo "TARGET_FILES=Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list" >> $GITHUB_ENV
-        echo "SEARCH_CHARS=DOMAIN,DOMAIN-SUFFIX,DOMAIN-KEYWORD,IP-CIDR,IP-CIDR6" >> $GITHUB_ENV
-        echo "REPLACE_CHARS=- DOMAIN,- DOMAIN-SUFFIX,- DOMAIN-KEYWORD,- IP-CIDR,- IP-CIDR6" >> $GITHUB_ENV
-        echo "COPY_DESTINATIONS=Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml" >> $GITHUB_ENV
+        echo "Event name: ${{ github.event_name }}"
+        echo "Ref: ${{ github.ref }}"
+        echo "SHA: ${{ github.sha }}"
         
     - name: Process files
+      env:
+        TARGET_FILES: ${{ github.event.inputs.target_files || 'Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list' }}
+        SEARCH_CHARS: ${{ github.event.inputs.search_chars || 'DOMAIN,,DOMAIN-SUFFIX,,DOMAIN-KEYWORD,,IP-CIDR,,IP-CIDR6,' }}
+        REPLACE_CHARS: ${{ github.event.inputs.replace_chars || ' - DOMAIN,, - DOMAIN-SUFFIX,, - DOMAIN-KEYWORD,, - IP-CIDR,, - IP-CIDR6,' }}
+        COPY_DESTINATIONS: ${{ github.event.inputs.copy_destinations || 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml' }}
       run: |
+        echo "=== Starting file processing ==="
+        echo "Target files: $TARGET_FILES"
+        echo "Search chars: $SEARCH_CHARS"
+        echo "Replace chars: $REPLACE_CHARS"
+        echo "Copy destinations: $COPY_DESTINATIONS"
+        
         # Convert comma-separated strings to arrays
-        IFS=',' read -ra TARGET_FILES_ARRAY <<< "$TARGET_FILES"
-        IFS=',' read -ra SEARCH_CHARS_ARRAY <<< "$SEARCH_CHARS"
-        IFS=',' read -ra REPLACE_CHARS_ARRAY <<< "$REPLACE_CHARS"
-        IFS=',' read -ra COPY_DESTINATIONS_ARRAY <<< "$COPY_DESTINATIONS"
+        IFS=',' read -ra TARGET_ARRAY <<< "$TARGET_FILES"
+        IFS=',' read -ra SEARCH_ARRAY <<< "$SEARCH_CHARS"
+        IFS=',' read -ra REPLACE_ARRAY <<< "$REPLACE_CHARS"
+        IFS=',' read -ra DEST_ARRAY <<< "$COPY_DESTINATIONS"
         
-        echo "Target files: ${TARGET_FILES_ARRAY[@]}"
-        echo "Search chars: ${SEARCH_CHARS_ARRAY[@]}"
-        echo "Replace chars: ${REPLACE_CHARS_ARRAY[@]}"
-        echo "Copy destinations: ${COPY_DESTINATIONS_ARRAY[@]}"
-        
-        # Validate input lengths
-        if [ ${#SEARCH_CHARS_ARRAY[@]} -ne ${#REPLACE_CHARS_ARRAY[@]} ]; then
-          echo "Error: Search characters count (${#SEARCH_CHARS_ARRAY[@]}) does not match replace characters count (${#REPLACE_CHARS_ARRAY[@]})"
+        # Validate arrays
+        if [ ${#SEARCH_ARRAY[@]} -ne ${#REPLACE_ARRAY[@]} ]; then
+          echo "❌ Error: Search and replace arrays have different lengths"
           exit 1
         fi
         
-        if [ ${#TARGET_FILES_ARRAY[@]} -ne ${#COPY_DESTINATIONS_ARRAY[@]} ]; then
-          echo "Error: Target files count (${#TARGET_FILES_ARRAY[@]}) does not match copy destinations count (${#COPY_DESTINATIONS_ARRAY[@]})"
+        if [ ${#TARGET_ARRAY[@]} -ne ${#DEST_ARRAY[@]} ]; then
+          echo "❌ Error: Target and destination arrays have different lengths"
           exit 1
         fi
         
-        # Process each file
-        for i in "${!TARGET_FILES_ARRAY[@]}"; do
-          SOURCE_FILE="${TARGET_FILES_ARRAY[$i]}"
-          DEST_FILE="${COPY_DESTINATIONS_ARRAY[$i]}"
+        # Process each file pair
+        for i in "${!TARGET_ARRAY[@]}"; do
+          SOURCE_FILE="${TARGET_ARRAY[i]}"
+          DEST_FILE="${DEST_ARRAY[i]}"
           
-          echo "Processing: $SOURCE_FILE -> $DEST_FILE"
+          echo "--- Processing: $SOURCE_FILE -> $DEST_FILE ---"
           
-          # Check if source file exists
+          # Check if source exists
           if [ ! -f "$SOURCE_FILE" ]; then
-            echo "Warning: Source file $SOURCE_FILE does not exist, skipping"
+            echo "⚠️  Warning: Source file '$SOURCE_FILE' not found, skipping"
             continue
           fi
           
           # Create destination directory
           mkdir -p "$(dirname "$DEST_FILE")"
           
-          # Read source file content
+          # Read source content
           CONTENT=$(cat "$SOURCE_FILE")
-          ORIGINAL_CONTENT="$CONTENT"
+          echo "Original file size: ${#CONTENT} characters"
           
-          echo "=== Character Replacement Details ==="
-          
-          # Perform character replacements
-          for j in "${!SEARCH_CHARS_ARRAY[@]}"; do
-            SEARCH="${SEARCH_CHARS_ARRAY[$j]}"
-            REPLACE="${REPLACE_CHARS_ARRAY[$j]}"
+          # Apply replacements
+          for j in "${!SEARCH_ARRAY[@]}"; do
+            SEARCH="${SEARCH_ARRAY[j]}"
+            REPLACE="${REPLACE_ARRAY[j]}"
             
             OLD_CONTENT="$CONTENT"
             CONTENT="${CONTENT//$SEARCH/$REPLACE}"
             
-            OLD_COUNT=$(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l || true)
-            NEW_COUNT=$(echo "$CONTENT" | grep -o "$SEARCH" | wc -l || true)
-            REPLACED_COUNT=$((OLD_COUNT - NEW_COUNT))
-            
-            echo "Replaced '$SEARCH' with '$REPLACE': $REPLACED_COUNT times"
-            echo "Modification location: Character replacement in '$SOURCE_FILE' - '$SEARCH' to '$REPLACE'"
+            CHANGES=$(($(echo "$OLD_CONTENT" | grep -o "$SEARCH" | wc -l) - $(echo "$CONTENT" | grep -o "$SEARCH" | wc -l)))
+            echo "Replaced '$SEARCH' with '$REPLACE': $CHANGES changes"
           done
           
-          # Write transformed content to destination file
+          # Write to destination
           echo "$CONTENT" > "$DEST_FILE"
-          echo "File copied to: $DEST_FILE"
-          echo "Copy file path: $SOURCE_FILE -> $DEST_FILE"
+          echo "✅ Saved to: $DEST_FILE"
         done
         
-    - name: Display differences
+        echo "=== File processing completed ==="
+        
+    - name: Commit and push changes
+      if: always()
       run: |
-        IFS=',' read -ra TARGET_FILES_ARRAY <<< "$TARGET_FILES"
-        IFS=',' read -ra COPY_DESTINATIONS_ARRAY <<< "$COPY_DESTINATIONS"
+        echo "=== Checking for changes ==="
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
         
-        echo "=== File Changes Summary ==="
-        for i in "${!TARGET_FILES_ARRAY[@]}"; do
-          SOURCE_FILE="${TARGET_FILES_ARRAY[$i]}"
-          DEST_FILE="${COPY_DESTINATIONS_ARRAY[$i]}"
-          
-          if [ -f "$SOURCE_FILE" ] && [ -f "$DEST_FILE" ]; then
-            echo "Comparing $SOURCE_FILE and $DEST_FILE:"
-            diff -u "$SOURCE_FILE" "$DEST_FILE" || true
-            echo "----------------------------------------"
-          fi
-        done
-        
-    - name: Commit changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        
-        git add .
-        
-        if git diff --staged --quiet; then
-          echo "No changes detected"
-        else
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            COMMIT_MSG="Manual: Sync rules - ${{ github.event.inputs.target_files }}"
-          else
-            COMMIT_MSG="Auto: Sync rules - $TARGET_FILES"
-          fi
-          
-          git commit -m "$COMMIT_MSG"
-          git push
-          echo "Changes committed and pushed"
+        # Check if there are any changes
+        if git diff --quiet && git diff --staged --quiet; then
+          echo "✅ No changes to commit"
+          exit 0
         fi
         
-    - name: Summary
-      run: |
-        IFS=',' read -ra TARGET_FILES_ARRAY <<< "$TARGET_FILES"
-        IFS=',' read -ra SEARCH_CHARS_ARRAY <<< "$SEARCH_CHARS"
-        IFS=',' read -ra REPLACE_CHARS_ARRAY <<< "$REPLACE_CHARS"
-        IFS=',' read -ra COPY_DESTINATIONS_ARRAY <<< "$COPY_DESTINATIONS"
+        echo "📝 Changes detected, committing..."
         
-        echo "=== Operation Summary ==="
-        echo "Trigger type: ${{ github.event_name }}"
-        echo "File pairs processed:"
-        for i in "${!TARGET_FILES_ARRAY[@]}"; do
-          echo "  ${TARGET_FILES_ARRAY[$i]} -> ${COPY_DESTINATIONS_ARRAY[$i]}"
-        done
-        echo ""
-        echo "Character replacements:"
-        for j in "${!SEARCH_CHARS_ARRAY[@]}"; do
-          echo "  '${SEARCH_CHARS_ARRAY[$j]}' -> '${REPLACE_CHARS_ARRAY[$j]}'"
-        done
+        # Add all changes
+        git add .
+        
+        # Create commit message
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          COMMIT_MSG="🔧 Manual sync: ${{ github.event.inputs.target_files || 'Rules update' }}"
+        else
+          COMMIT_MSG="🤖 Auto sync: Rules update"
+        fi
+        
+        # Commit and push
+        git commit -m "$COMMIT_MSG"
+        git push
+        echo "✅ Changes committed and pushed"
+        
+    - name: Final summary
+      if: always()
+      run: |
+        echo "=== Workflow Summary ==="
+        echo "✅ Workflow completed successfully"
+        echo "Event: ${{ github.event_name }}"
+        echo "Branch: ${{ github.ref }}"
+        date
