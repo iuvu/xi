@@ -18,26 +18,6 @@ on:
       copy_destinations:
         description: 'Destination file paths (comma separated)'
         required: true
-        default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml'
-
-on:
-  workflow_dispatch:
-    inputs:
-      target_files:
-        description: 'Source file paths (comma separated)'
-        required: true
-        default: 'Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list'
-      search_chars:
-        description: 'Characters to search for (comma separated)'
-        required: true
-        default: 'DOMAIN,,DOMAIN-SUFFIX,,DOMAIN-KEYWORD,,IP-CIDR,,IP-CIDR6,'
-      replace_chars:
-        description: 'Characters to replace with (comma separated)'
-        required: true
-        default: ' - DOMAIN,, - DOMAIN-SUFFIX,, - DOMAIN-KEYWORD,, - IP-CIDR,, - IP-CIDR6,'
-      copy_destinations:
-        description: 'Destination file paths (comma separated)'
-        required: true
         default: '        default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml''
 
   push:
