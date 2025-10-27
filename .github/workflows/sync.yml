@@ -46,8 +46,8 @@ jobs:
       if: github.event_name != 'workflow_dispatch'
       run: |
         echo "TARGET_FILES=Rules/list/Game/Sky.list,Rules/list/Game/SkyCN.list,Rules/list/Emby.list,Rules/list/live_television.list" >> $GITHUB_ENV
-        echo "SEARCH_CHARS=DOMAIN,DOMAIN-SUFFIX,DOMAIN-KEYWORD,IP-CIDR,IP-CIDR6" >> $GITHUB_ENV
-        echo "REPLACE_CHARS=- DOMAIN,- DOMAIN-SUFFIX,- DOMAIN-KEYWORD,- IP-CIDR,- IP-CIDR6" >> $GITHUB_ENV
+        echo "SEARCH_CHARS=DOMAIN,,DOMAIN-SUFFIX,,DOMAIN-KEYWORD,,IP-CIDR,,IP-CIDR6," >> $GITHUB_ENV
+        echo "REPLACE_CHARS= - DOMAIN,, - DOMAIN-SUFFIX,, - DOMAIN-KEYWORD,, - IP-CIDR,, - IP-CIDR6," >> $GITHUB_ENV
         echo "COPY_DESTINATIONS=Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml" >> $GITHUB_ENV
 
     - name: Debug information
