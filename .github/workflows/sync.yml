@@ -18,7 +18,7 @@ on:
       copy_destinations:
         description: 'Destination file paths (comma separated)'
         required: true
-        default: '        default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml''
+        default: 'Rules/yaml/Game/Sky.yaml,Rules/yaml/Game/SkyCN.yaml,Rules/yaml/Emby.yaml,Rules/yaml/live_television.yaml''
 
   push:
     paths:
