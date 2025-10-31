@@ -3,10 +3,10 @@
 "description":"Yily", 
 "icons":
     [
-        {"name":"Magpie", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/main\/Icon\/Magpie.png"},
+        {"name":"Magpie", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/master\/Icon\/Magpie.png"},
 
-        {"name":"Yomo-1", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/main\/Icon\/Yomo-1.png"},
-        {"name":"Yomo-2", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/main\/Icon\/Yomo-2.png"},
-        {"name":"Yomo-3", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/main\/Icon\/Yomo-3.png"},
+        {"name":"Yomo-1", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/master\/Icon\/Yomo-1.png"},
+        {"name":"Yomo-2", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/master\/Icon\/Yomo-2.png"},
+        {"name":"Yomo-3", "url":"https:\/\/raw.githubusercontent.com\/iuvu\/xi\/master\/Icon\/Yomo-3.png"},
     ]
 }
